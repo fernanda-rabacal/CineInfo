@@ -1,14 +1,14 @@
 import { Calendar, Clock, FilmStrip, Star, VideoCamera } from "phosphor-react-native";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
+import { useNavigation } from "@react-navigation/native";
 
-export function FavoriteItem({ item }) {
+export function FavoriteItem({ item, recommendation = false }) {
+  const navigation = useNavigation()
   const formattedDate = new Date(item.release_date || item.first_air_date).getFullYear()
 
-  console.log(item)
-
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={() => navigation.navigate("Details", { item })}>
       <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} />
 
       <View>

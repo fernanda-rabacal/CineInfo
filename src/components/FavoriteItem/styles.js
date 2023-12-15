@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     gap: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   poster: {
     width: 110,

@@ -1,29 +1,26 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1e1139",
-    paddingHorizontal: 15
+  backBtn: {
+    marginBottom: 15,
   },
   text: {
     color: '#ccc',
-    fontSize: 16
+    fontSize: 15
   },
   poster: {
     width: '100%', 
-    height: 200, 
+    height: 220, 
     borderRadius: 5,
   },
   title: {
-    fontSize: 28,
+    fontSize: 25,
     color: '#ededed',
     marginVertical: 15,
   },
   timeAndVoteContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 50,
     marginBottom: 15,
   },
   releaseAndGenreContainer: {
@@ -34,7 +31,7 @@ export const styles = StyleSheet.create({
     marginBottom: 20
   },
   releaseAndGenreTitle: {
-    fontSize: 20,
+    fontSize: 16,
     color: '#ededed',
     marginBottom: 10
   },
@@ -44,17 +41,31 @@ export const styles = StyleSheet.create({
     padding: 5,
     textAlign: 'center',
     borderRadius: 5,
-    color: '#d6d6d6',
+    color: '#c3c3c3',
     fontSize: 12
   },
   dataContainer: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 5,
     alignItems: 'center'
   },
   overview: {
     fontSize: 17,
-    color: '#d3d3d3',
+    color: '#c8c8c8f2',
     textAlign: 'justify'
+  },
+  recommendationsTitle: {
+    color: '#ffffff',
+    fontSize: 18,
+    marginTop: 25,
+    marginBottom: 15
+  },
+  recommendations: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    gap: 12,
+    paddingBottom: 20
   }
 })

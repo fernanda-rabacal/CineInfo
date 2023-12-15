@@ -5,30 +5,25 @@ import { ArrowLeft, FilmStrip, MonitorPlay, Star } from "phosphor-react-native";
 import { TvSeries } from "../screens/Tv";
 import { TouchableOpacity } from "react-native";
 import { Favorites } from "../screens/Favorites";
-import { useNavigation } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const { Navigator, Screen } = createBottomTabNavigator()
 
 export function RouterTabs() {
-    const navigation = useNavigation()
-
     return (
         <Navigator 
             screenOptions={{
-                tabBarActiveTintColor: "#5e3f9d",
-                tabBarInactiveTintColor: "#212121",
-                headerTitleAlign: 'center',
-                headerTintColor: 'white',
-                headerStyle: {
-                    backgroundColor: "#1e1139",
-                }
+                headerShown: false,
+                tabBarActiveTintColor: "#ffffff",
+                tabBarInactiveTintColor: "#787878",
+                tabBarStyle: {
+                    backgroundColor: '#1f1632'
+                },
             }}>
             <Screen 
                name="Filmes" 
                component={Movies}
                 options={{
-                    headerShown: false, 
-                    /* para que não duplique o header do stackNavigator com o header do TabNavigator */
                     tabBarIcon: ({ color, size }) => <FilmStrip color={color} size={size} />,
                     tabBarLabel: "Filmes"
                 }}  />
@@ -36,7 +31,6 @@ export function RouterTabs() {
                     name="Séries" 
                     component={TvSeries} 
                     options={{
-                        headerShown: false, 
                         tabBarLabel: "Series",
                         tabBarIcon: ({ color, size }) => <MonitorPlay color={color} size={size} />
                     }}
@@ -53,18 +47,21 @@ export function RouterTabs() {
                     name="Details" 
                     component={Details} 
                     options={{
-                        headerLeft: () => (
-                            <TouchableOpacity 
-                                style={{ paddingLeft: 10 }}
-                                onPress={() => navigation.goBack()}>
-                                <ArrowLeft color="#fff" />
-                            </TouchableOpacity>
-                        ),
                         tabBarItemStyle: {
                             display: 'none'
                         },
                     }}
                     />
         </Navigator>
+    )
+}
+
+const Stack = createNativeStackNavigator() 
+
+export function DetailsStack() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen options={{ headerShown: false }} name="Details" component={Details} />
+        </Stack.Navigator>
     )
 }

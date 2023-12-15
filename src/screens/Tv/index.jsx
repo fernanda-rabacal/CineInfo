@@ -4,11 +4,13 @@ import { api } from "../../services/api";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ItemDisplay } from "../../components/ItemDisplay";
 import { styles } from "../Movies/styles";
+import { ScreenLayout } from "../../components/ScreenLayout";
 
 export function TvSeries() {
     const [tvSeries, setTvSeries] = useState([])
     const [search, setSearch] = useState('')
     const [filteredTvSeries, setFilteredTvSeries] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     
     async function getTvSeries() {
         const popularData = await api.get(`/tv/popular`)
@@ -34,6 +36,8 @@ export function TvSeries() {
                 data: topRatedData.data.results,
             }
         ])
+
+        setIsLoading(false)
     }
 
     function filterTvSeries() {
@@ -67,41 +71,42 @@ export function TvSeries() {
     }, [search])
 
     return (
-        <SafeAreaView style={styles.container}>
-           <TextInput 
+        <ScreenLayout isLoading={isLoading}>
+            <TextInput 
+                placeholder="Pesquise..."
                 style={styles.searchInput} 
                 onChangeText={(text) => setSearch(text)}
-            />
-            {search.length > 0 ? 
-                filteredTvSeries.length > 0 ? (
-                    <FlatList 
-                        data={filteredTvSeries} 
-                        keyExtractor={(item, index) => item.id + index} 
-                        numColumns={2}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => (
-                            <ItemDisplay movie={item} />
-                        )}
-                    />
-                ) : <Text style={styles.listEmptyText}>Nenhuma série encontrada</Text>
-            : 
-            <ScrollView showsVerticalScrollIndicator={false}>
-                {tvSeries.map(category => (
-                    <View key={category.name} style={styles.moviesContainer}>
-                        <Text style={styles.movieContainerTitle}>{category.name}</Text>
-                        <FlatList 
-                            data={category.data}
-                            keyExtractor={(item) => item.id}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => (
-                                <ItemDisplay movie={item} />
-                            )}
-                        />
-                    </View>
-                ))}
-            </ScrollView>
-            } 
-        </SafeAreaView>
+             />
+             {search.length > 0 ? 
+                 filteredTvSeries.length > 0 ? (
+                     <FlatList 
+                         data={filteredTvSeries} 
+                         keyExtractor={(item, index) => item.id + index} 
+                         numColumns={2}
+                         showsHorizontalScrollIndicator={false}
+                         renderItem={({ item }) => (
+                             <ItemDisplay item={item} />
+                         )}
+                     />
+                 ) : <Text style={styles.listEmptyText}>Nenhuma série encontrada</Text>
+             : 
+             <ScrollView showsVerticalScrollIndicator={false}>
+                 {tvSeries.map(category => (
+                     <View key={category.name} style={styles.moviesContainer}>
+                         <Text style={styles.movieContainerTitle}>{category.name}</Text>
+                         <FlatList 
+                             data={category.data}
+                             keyExtractor={(item) => item.id}
+                             horizontal
+                             showsHorizontalScrollIndicator={false}
+                             renderItem={({ item }) => (
+                                 <ItemDisplay item={item} />
+                             )}
+                         />
+                     </View>
+                 ))}
+             </ScrollView>
+             } 
+        </ScreenLayout>
     )
 }

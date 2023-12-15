@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ItemDisplay } from "../../components/ItemDisplay";
 import { styles } from "./styles";
 import { FavoriteItem } from "../../components/FavoriteItem";
+import { ScreenLayout } from "../../components/ScreenLayout";
 
 export function Favorites({ navigation, route }) {
     const [favorites, setFavorites] = useState([])
@@ -28,11 +29,14 @@ export function Favorites({ navigation, route }) {
     }, [])
 
     return (
-        <SafeAreaView style={styles.container}>
+        <ScreenLayout>
+            <Text style={styles.title}>Minha lista</Text>
             <ScrollView
+                showsVerticalScrollIndicator={false}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={getFavorites} />
                   }>
+                    
                 {
                     favorites.length > 0 ? (
                         favorites.map(favorite => (
@@ -43,6 +47,6 @@ export function Favorites({ navigation, route }) {
                     <Text style={styles.listEmptyText}>Nada por aqui... Adicione algum item nos seus favoritos</Text>
                 }
             </ScrollView>
-        </SafeAreaView>
+        </ScreenLayout>
     )
 }

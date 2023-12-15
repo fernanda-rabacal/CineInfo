@@ -1,19 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-    container : {
-        flex: 1,
-        backgroundColor: "#1e1139",
-        padding: 30,
-        gap: 30
-    },
-    searchContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        gap: 10
-    },
     listEmptyText: {
         fontSize: 20,
         color: '#e3e3e3',
@@ -24,6 +11,7 @@ export const styles = StyleSheet.create({
         color: '#dedede',
         fontSize: 16,
         padding: 7,
+        marginVertical: 30,
         borderRadius: 5,
         shadowColor: "#000",
         shadowOffset: {

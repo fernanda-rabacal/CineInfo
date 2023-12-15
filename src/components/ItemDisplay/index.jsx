@@ -1,16 +1,19 @@
-import { Image, Text, TouchableOpacity } from "react-native"
+import { Image, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { styles } from "./styles"
 
-export function ItemDisplay({ movie: item }) {
+export function ItemDisplay({ item, recommendation = false }) {
     const navigation = useNavigation()
 
     return (
         <TouchableOpacity 
-            style={styles.container}
             onPress={() => navigation.navigate("Details", { item })}>
             <Image  
-                style={styles.image} 
+                style={[styles.image, !recommendation && { 
+                    marginRight: 10,
+                    width: 130,
+                    height: 200 
+                }]} 
                 source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} />
         </TouchableOpacity>
     )
