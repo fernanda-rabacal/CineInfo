@@ -1,13 +1,21 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { BottomTabNavigationProp, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Movies } from "../screens/Movies"
 import { Details } from "../screens/Details";
-import { ArrowLeft, FilmStrip, MonitorPlay, Star } from "phosphor-react-native";
+import { FilmStrip, MonitorPlay, Star } from "phosphor-react-native";
 import { TvSeries } from "../screens/Tv";
-import { TouchableOpacity } from "react-native";
 import { Favorites } from "../screens/Favorites";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { RouteProp } from "@react-navigation/native";
+import { AppRouteProps } from "../@types/navigationTypes";
 
-const { Navigator, Screen } = createBottomTabNavigator()
+export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRouteProps>;
+
+export type AppScreensNavigationProps = {
+    route: RouteProp<AppRouteProps>;
+    navigation: AppNavigatorRoutesProps;
+};
+  
+const { Navigator, Screen } = createBottomTabNavigator<AppRouteProps>()
 
 export function RouterTabs() {
     return (
@@ -21,14 +29,14 @@ export function RouterTabs() {
                 },
             }}>
             <Screen 
-               name="Filmes" 
+               name="Movies" 
                component={Movies}
                 options={{
                     tabBarIcon: ({ color, size }) => <FilmStrip color={color} size={size} />,
                     tabBarLabel: "Filmes"
                 }}  />
                 <Screen 
-                    name="Séries" 
+                    name="TvSeries" 
                     component={TvSeries} 
                     options={{
                         tabBarLabel: "Series",
@@ -36,7 +44,7 @@ export function RouterTabs() {
                     }}
                     />
                 <Screen 
-                    name="Favoritos"
+                    name="Favorites"
                     component={Favorites}
                     options={{
                         tabBarLabel: "Favoritos",
@@ -53,15 +61,5 @@ export function RouterTabs() {
                     }}
                     />
         </Navigator>
-    )
-}
-
-const Stack = createNativeStackNavigator() 
-
-export function DetailsStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen options={{ headerShown: false }} name="Details" component={Details} />
-        </Stack.Navigator>
     )
 }

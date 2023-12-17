@@ -1,62 +1,36 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useCallback, useState } from "react";
 import { styles } from "./styles";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { CaretLeft, Check, Clock, Plus, Star } from "phosphor-react-native";
-import { api } from "../../services/api";
 import { useFocusEffect } from "@react-navigation/native";
+
+import { api } from "../../services/api";
+import { useFavorite } from "../../hooks/useFavorite";
 import { ScreenLayout } from "../../components/ScreenLayout";
 import { ItemDisplay } from "../../components/ItemDisplay";
+import { MovieOrSerie } from "../../@types/movieOrSerie";
 
 export function Details({ navigation, route }) {
     const { item } = route.params
-    const [isFavorited, setIsFavorited] = useState(false)
-    const [itemData, setItemData] = useState({})
+    const { favorites, addToFavorites, removeFromFavorites } = useFavorite()
+
+    const [isFavorited, setIsFavorited] = useState(() => {
+        const isFavorite = favorites.find(favorite => favorite.id === item.id)
+
+        return !!isFavorite
+    })
+    const [itemData, setItemData] = useState<MovieOrSerie | null>()
     const [isLoading, setIsLoading] = useState(false)
     const [recommedations, setRecommentations] = useState([])
-
-    async function getFavorites() {
-        let items = await AsyncStorage.getItem("favorites") 
-
-        if(!items)  {
-            return;
-        }
-
-        items = JSON.parse(items)
-        const isIncludedInFavorites = items.find((element) => element.id === item.id)
-
-        if(isIncludedInFavorites) {
-            setIsFavorited(true)
-        }  
-    }
     
-    async function AddToFavorites() {
-        let items = await AsyncStorage.getItem("favorites") 
-        //sendo puxado pela primeira vez, esse valor é null
-        
-        if(items) {
-            items = JSON.parse(items)
-            
-            await AsyncStorage.setItem("favorites", JSON.stringify([...items, itemData]))
-        } else {
-            await AsyncStorage.setItem("favorites", JSON.stringify([itemData]))
-        }
-        
-        setIsFavorited(true)
-    }
-    
-    async function RemoveFromFavorites() {
-        let items = await AsyncStorage.getItem("favorites") 
-        
-        if(items) {
-            items = JSON.parse(items)
-            
-            const updatedFavorites = items.filter(element => element.id !== item.id)
-            
-            await AsyncStorage.setItem("favorites", JSON.stringify(updatedFavorites))
-            setIsFavorited(false)
-        }
-    }
+    const formattedReleasedData = new Date(
+            itemData.release_date || itemData.first_air_date
+        )
+        .toLocaleDateString("pt-BR", {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        })
 
     async function getDetailsData() {
         const url = item.title ? `/movie/${item.id}` : `/tv/${item.id}`
@@ -68,10 +42,21 @@ export function Details({ navigation, route }) {
         setIsLoading(false)
     }
     
+    async function handleAddToFavorites() {
+        await addToFavorites(itemData)
+
+        setIsFavorited(true)
+    }
+
+    async function handleRemoveFromFavorites() {
+        await removeFromFavorites(itemData)
+
+        setIsFavorited(false)
+    }
+    
     useFocusEffect(
         useCallback(() => {
             setIsLoading(true)
-            getFavorites()
             getDetailsData()
           }, [item])
     )
@@ -118,7 +103,7 @@ export function Details({ navigation, route }) {
                     </View>
 
                     <TouchableOpacity 
-                        onPress={isFavorited ? RemoveFromFavorites : AddToFavorites} 
+                        onPress={isFavorited ? handleRemoveFromFavorites : handleAddToFavorites} 
                         style={{ marginEnd: 20 }}
                         >
                         {!isFavorited ? <Plus color="#fff" /> : <Check color="#fff" /> }
@@ -128,12 +113,7 @@ export function Details({ navigation, route }) {
                     <View style={{ width: '45%' }}>
                         <Text style={styles.releaseAndGenreTitle}>Lançamento</Text>
                         <Text style={styles.text}>
-                            {new Date(itemData.release_date || itemData.first_air_date)
-                                .toLocaleDateString({
-                                    year: 'long',
-                                    month: '2-digit',
-                                    day: '2-digit'
-                                })}
+                            {formattedReleasedData}
                         </Text>
                     </View>
                     <View>
@@ -153,7 +133,7 @@ export function Details({ navigation, route }) {
                 <View style={styles.recommendations}>
                     {
                         recommedations.map(recommedation => (
-                            <ItemDisplay key={item.id} item={recommedation} recommendation />
+                            <ItemDisplay key={recommedation.id} item={recommedation} recommendation />
                         ))
                     }
                 </View>
