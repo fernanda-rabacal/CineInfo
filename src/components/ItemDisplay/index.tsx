@@ -1,8 +1,14 @@
 import { Image, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { styles } from "./styles"
+import { MovieOrSerie } from "../../@types/movieOrSerie"
 
-export function ItemDisplay({ item, recommendation = false }) {
+interface ItemDisplayProps {
+    item: MovieOrSerie
+    recommendation?: boolean
+}
+
+export function ItemDisplay({ item, recommendation = false }: ItemDisplayProps) {
     const navigation = useNavigation()
 
     return (

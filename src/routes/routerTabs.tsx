@@ -1,5 +1,4 @@
 import { BottomTabNavigationProp, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Movies } from "../screens/Movies"
 import { Details } from "../screens/Details";
 import { FilmStrip, MonitorPlay, Star } from "phosphor-react-native";
@@ -14,8 +13,8 @@ export type AppScreensNavigationProps = {
     route: RouteProp<AppRouteProps>;
     navigation: AppNavigatorRoutesProps;
 };
-  
-const { Navigator, Screen } = createBottomTabNavigator<AppRouteProps>()
+
+const { Navigator, Screen } = createBottomTabNavigator<AppRouteProps>();
 
 export function RouterTabs() {
     return (

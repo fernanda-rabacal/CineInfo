@@ -3,7 +3,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 
-export function FavoriteItem({ item, recommendation = false }) {
+export function FavoriteItem({ item }) {
   const navigation = useNavigation()
   const formattedDate = new Date(item.release_date || item.first_air_date).getFullYear()
 
@@ -13,28 +13,29 @@ export function FavoriteItem({ item, recommendation = false }) {
 
       <View>
         <Text style={styles.title}>{item.name || item.title}</Text>
+
         <View style={styles.dataContainer}>
           <Star color="#d7a500" size={20} />
           <Text style={styles.text}>{item.vote_average.toFixed(1)}</Text>
         </View>
-        {
-            item.runtime && 
-            <View style={styles.dataContainer}>
-                <Clock color="#ccc"  size={18} />
-                <Text style={styles.text}>
-                    {item.runtime} minutos
-                </Text>
-            </View>
-        }
-        {
-          item.seasons && 
-            <View style={styles.dataContainer}>
-                <VideoCamera color="#ccc" size={20} />
-                <Text style={styles.text}>
-                    {item.seasons.length} Temporadas
-                </Text>
-            </View>
-        }
+          {
+              item.runtime && 
+              <View style={styles.dataContainer}>
+                  <Clock color="#ccc"  size={18} />
+                  <Text style={styles.text}>
+                      {item.runtime} minutos
+                  </Text>
+              </View>
+          }
+          {
+            item.seasons && 
+              <View style={styles.dataContainer}>
+                  <VideoCamera color="#ccc" size={20} />
+                  <Text style={styles.text}>
+                      {item.seasons.length} Temporadas
+                  </Text>
+              </View>
+          }
         <View style={styles.dataContainer}>
           <FilmStrip color="#ccc" size={20} />
           <Text style={styles.text}>{item.genres[0].name}</Text>

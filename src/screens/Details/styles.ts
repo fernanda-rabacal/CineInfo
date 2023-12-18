@@ -18,6 +18,16 @@ export const styles = StyleSheet.create({
     color: '#ededed',
     marginVertical: 15,
   },
+  trailerBtnContainer: {
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginBottom: 20,
+    backgroundColor: "#bc85ff"
+  },
   timeAndVoteContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

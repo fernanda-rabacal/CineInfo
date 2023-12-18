@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { styles } from "./styles";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { CaretLeft, Check, Clock, Plus, Star } from "phosphor-react-native";
+import { CaretLeft, Check, Clock, PlayCircle, Plus, Star } from "phosphor-react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { api } from "../../services/api";
@@ -9,6 +9,7 @@ import { useFavorite } from "../../hooks/useFavorite";
 import { ScreenLayout } from "../../components/ScreenLayout";
 import { ItemDisplay } from "../../components/ItemDisplay";
 import { MovieOrSerie } from "../../@types/movieOrSerie";
+import { TrailerVideo } from "../../components/TrailerVideo";
 
 export function Details({ navigation, route }) {
     const { item } = route.params
@@ -19,37 +20,46 @@ export function Details({ navigation, route }) {
 
         return !!isFavorite
     })
-    const [itemData, setItemData] = useState<MovieOrSerie | null>()
+    const [itemData, setItemData] = useState<MovieOrSerie>({})
     const [isLoading, setIsLoading] = useState(false)
     const [recommedations, setRecommentations] = useState([])
-    
-    const formattedReleasedData = new Date(
-            itemData.release_date || itemData.first_air_date
-        )
-        .toLocaleDateString("pt-BR", {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        })
+    const [trailerKey, setTrailerKey] = useState('')
+    const [formattedDate, setFormattedDate] = useState('')
+    const [modalTrailerVisible, setModalTrailerVisible] = useState(false)
 
     async function getDetailsData() {
-        const url = item.title ? `/movie/${item.id}` : `/tv/${item.id}`
+        const url = `/${item.title ? "movie" : "tv"}/${item.id}`
         const itemData = await api.get(url)
         const alike = await api.get(`${url}/recommendations`)
+        const trailers = await api.get(`${url}/videos`)
+
+        if(trailers.data.results.length > 0) {
+            setTrailerKey(trailers.data.results[0].key)
+        }
 
         setRecommentations(alike.data.results)
         setItemData(itemData.data)
+        
+        setFormattedDate(new Date(
+            itemData.data.release_date || itemData.data.first_air_date
+            )
+            .toLocaleDateString("pt-BR", {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }))
+
         setIsLoading(false)
     }
     
-    async function handleAddToFavorites() {
-        await addToFavorites(itemData)
+    function handleAddToFavorites() {
+        addToFavorites(itemData)
 
         setIsFavorited(true)
     }
 
-    async function handleRemoveFromFavorites() {
-        await removeFromFavorites(itemData)
+    function handleRemoveFromFavorites() {
+        removeFromFavorites(itemData)
 
         setIsFavorited(false)
     }
@@ -63,18 +73,30 @@ export function Details({ navigation, route }) {
 
     return (
         <ScreenLayout isLoading={isLoading}>
+            <TrailerVideo trailerKey={trailerKey} visible={modalTrailerVisible} onChangeVisible={setModalTrailerVisible} />
+
             <TouchableOpacity 
                 style={styles.backBtn}
                 onPress={() => navigation.goBack()}>
                 <CaretLeft color="#fff" />
             </TouchableOpacity>
-
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Image 
                     style={styles.poster}
                     source={{ uri: `https://image.tmdb.org/t/p/w500${item.backdrop_path}` }} 
                     />
                 <Text style={styles.title}>{itemData.title || itemData.name}</Text>
+                {
+                    trailerKey && (
+                        <TouchableOpacity 
+                            style={styles.trailerBtnContainer} 
+                            onPress={() => setModalTrailerVisible(true)}
+                            >
+                            <PlayCircle color="#ffffff" size={28} />
+                            <Text style={{ fontSize: 20, color: 'white' }}>Trailer</Text>
+                        </TouchableOpacity>
+                    )
+                }
                 <View style={styles.timeAndVoteContainer}>
                     {
                         itemData.runtime && 
@@ -85,7 +107,6 @@ export function Details({ navigation, route }) {
                             </Text>
                         </View>
                     }
-
                     {
                         itemData.seasons && 
                         <View>
@@ -94,7 +115,6 @@ export function Details({ navigation, route }) {
                             </Text>
                         </View>
                     }
-
                     <View style={styles.dataContainer}>
                         <Star color="#ffb42a" size={17} />
                         <Text style={styles.text}>
@@ -113,7 +133,7 @@ export function Details({ navigation, route }) {
                     <View style={{ width: '45%' }}>
                         <Text style={styles.releaseAndGenreTitle}>Lançamento</Text>
                         <Text style={styles.text}>
-                            {formattedReleasedData}
+                            {formattedDate}
                         </Text>
                     </View>
                     <View>
