@@ -1,33 +1,32 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { Dimensions, Modal, TouchableOpacity } from "react-native";
-
-import * as ScreenOrientation from "expo-screen-orientation";
-import YoutubePlayer from "react-native-youtube-iframe";
-import { CaretLeft } from "phosphor-react-native";
+import {Dispatch, SetStateAction, useEffect} from 'react';
+import {Dimensions, Modal, TouchableOpacity} from 'react-native';
+import Orientation from 'react-native-orientation-locker';
+import YoutubePlayer from 'react-native-youtube-iframe';
+import {CaretLeft} from 'phosphor-react-native';
 
 interface TrailerVideoProps {
   trailerKey: string;
   visible: boolean;
-  onChangeVisible: Dispatch<SetStateAction<boolean>>  
+  onChangeVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-export function TrailerVideo({ trailerKey, visible, onChangeVisible }:TrailerVideoProps) {
-  const windowHeigth = Dimensions.get('window').height
-  const windowWidth = Dimensions.get('window').width
+export function TrailerVideo({
+  trailerKey,
+  visible,
+  onChangeVisible,
+}: TrailerVideoProps) {
+  const windowHeigth = Dimensions.get('window').height;
+  const windowWidth = Dimensions.get('window').width;
 
   useEffect(() => {
-    if(visible) {
-      changeOrientation(ScreenOrientation.OrientationLock.LANDSCAPE)
+    if (visible) {
+      Orientation.lockToLandscape();
     } else {
-      changeOrientation(ScreenOrientation.OrientationLock.PORTRAIT)
+      Orientation.lockToPortrait();
     }
-  }, [visible])
+  }, [visible]);
 
-  console.log(trailerKey)
-  
-  const changeOrientation = async (newOrientation) => {
-    await ScreenOrientation.lockAsync(newOrientation);
-  };
+  console.log(trailerKey);
 
   /* useFocusEffect(
     useCallback(() => {
@@ -40,16 +39,15 @@ export function TrailerVideo({ trailerKey, visible, onChangeVisible }:TrailerVid
 
   return (
     <Modal visible={visible}>
-      <TouchableOpacity 
-          style={
-            { position: 'absolute', top: 20, left: 20, zIndex: 10}}
-          onPress={() => onChangeVisible(false)}>
-          <CaretLeft color="#fff" />
+      <TouchableOpacity
+        style={{position: 'absolute', top: 20, left: 20, zIndex: 10}}
+        onPress={() => onChangeVisible(false)}>
+        <CaretLeft color="#fff" />
       </TouchableOpacity>
       <YoutubePlayer
         height={windowWidth}
         width={windowHeigth}
-        play={true}
+        play={false}
         videoId={trailerKey}
       />
     </Modal>

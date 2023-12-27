@@ -5,14 +5,14 @@ import { MovieOrSerie } from "../@types/movieOrSerie";
 interface FavoritesContextProps {
   favorites: MovieOrSerie[]
   addToFavorites: (item: MovieOrSerie) => void
-  removeFromFavorites: (item: MovieOrSerie) => void
+  removeFromFavorites: (itemId: string) => void
   getFavorites: () => void
 }
 
 export const FavoritesContext = createContext({} as FavoritesContextProps)
 
 export function FavoritesContextProvider({ children }) {
-  const [favorites, setFavorites] = useState([])
+  const [favorites, setFavorites] = useState<MovieOrSerie[]>([])
 
   async function getFavorites() {
     const items = await AsyncStorage.getItem("favorites")
@@ -34,11 +34,11 @@ export function FavoritesContextProvider({ children }) {
     }
   }
   
-  async function removeFromFavorites(item) {
-    const itemIsFavorite = favorites.find(favorite => favorite.id === item.id) 
+  async function removeFromFavorites(itemId: string) {
+    const itemIsFavorite = favorites.find(favorite => favorite.id === itemId) 
     
     if(itemIsFavorite) {  
-      const updatedFavorites = favorites.filter(element => element.id !== item.id)
+      const updatedFavorites = favorites.filter(element => element.id !== itemId)
       
       setFavorites(updatedFavorites)
     }

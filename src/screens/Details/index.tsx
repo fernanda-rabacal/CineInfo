@@ -1,15 +1,15 @@
-import { useCallback, useState } from "react";
 import { styles } from "./styles";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { CaretLeft, Check, Clock, PlayCircle, Plus, Star } from "phosphor-react-native";
-import { useFocusEffect } from "@react-navigation/native";
 
-import { api } from "../../services/api";
+import { MovieOrSerie } from "../../@types/movieOrSerie";
 import { useFavorite } from "../../hooks/useFavorite";
 import { ScreenLayout } from "../../components/ScreenLayout";
 import { ItemDisplay } from "../../components/ItemDisplay";
-import { MovieOrSerie } from "../../@types/movieOrSerie";
 import { TrailerVideo } from "../../components/TrailerVideo";
+import { api } from "../../services/api";
 
 export function Details({ navigation, route }) {
     const { item } = route.params
@@ -59,7 +59,7 @@ export function Details({ navigation, route }) {
     }
 
     function handleRemoveFromFavorites() {
-        removeFromFavorites(itemData)
+        removeFromFavorites(itemData.id)
 
         setIsFavorited(false)
     }
@@ -77,7 +77,8 @@ export function Details({ navigation, route }) {
 
             <TouchableOpacity 
                 style={styles.backBtn}
-                onPress={() => navigation.goBack()}>
+                onPress={() => navigation.goBack()}
+                >
                 <CaretLeft color="#fff" />
             </TouchableOpacity>
             <ScrollView showsVerticalScrollIndicator={false}>

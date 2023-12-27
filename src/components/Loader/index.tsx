@@ -7,7 +7,7 @@ export function Loader() {
   return (
     <View style={styles.container}>
       <LottieView
-        source={require("../../../assets/loader.json")}
+        source={require("../../assets/loader.json")}
         style={styles.animation}
         autoPlay
       />
