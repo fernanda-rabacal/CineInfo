@@ -1,112 +1,75 @@
-import { useEffect, useState } from "react";
-import { FlatList, ScrollView, Text, TextInput, View } from "react-native";
-import { api } from "../../services/api";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ItemDisplay } from "../../components/ItemDisplay";
-import { styles } from "../Movies/styles";
-import { ScreenLayout } from "../../components/ScreenLayout";
+import { useEffect, useState } from 'react';
+import { FlatList, ScrollView, Text, TextInput, View } from 'react-native';
+import { ItemDisplay } from '../../components/ItemPosterDisplay';
+import { styles } from '../Movies/styles';
+import { ScreenLayout } from '../../components/ScreenLayout';
+import { TvSerie } from '../../@types/cineItems';
+import { useCineItem } from '../../hooks/useData';
 
 export function TvSeries() {
-    const [tvSeries, setTvSeries] = useState([])
-    const [search, setSearch] = useState('')
-    const [filteredTvSeries, setFilteredTvSeries] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
-    
-    async function getTvSeries() {
-        const popularData = await api.get(`/tv/popular`)
-        const topRatedData = await api.get(`/tv/top_rated`)
-        const airingTodayData = await api.get(`/tv/airing_today`)
-        const onTheAirData = await api.get(`/tv/on_the_air`)
+  const { tvSeries } = useCineItem();
+  const [search, setSearch] = useState('');
+  const [filteredTvSeries, setFilteredTvSeries] = useState<TvSerie[]>([]);
 
-        setTvSeries([
-            {
-                name: "Populares",
-                data: popularData.data.results
-            },
-            {
-                name: "Lançamentos",
-                data: airingTodayData.data.results
-            },
-            {
-                name: "No Ar Agora",
-                data: onTheAirData.data.results
-            },
-            {
-                name: "Bem Avaliados",
-                data: topRatedData.data.results,
-            }
-        ])
+  function filterTvSeries() {
+    let tvSeriesData: TvSerie[] = [];
 
-        setIsLoading(false)
+    for (let category of tvSeries) {
+      tvSeriesData.push(...(category.data as TvSerie[]));
     }
 
-    function filterTvSeries() {
-        let tvSeriesData = []
-        
-        for(let category of tvSeries) {
-            tvSeriesData.push(...category.data)
-        }
-
-        if (!search) {
-            setFilteredTvSeries([])
-            return;
-        }
-
-        const updatedTvSeries = tvSeriesData.filter(tvSerie => { 
-            const lowerTitle = tvSerie.name.toLowerCase()
-
-            return lowerTitle.includes(search.toLowerCase())
-        })
-
-        setFilteredTvSeries(updatedTvSeries)
+    if (!search) {
+      setFilteredTvSeries([]);
+      return;
     }
 
-    useEffect(() => {
-        getTvSeries()
-        /* array vazio para ser chamado apenas no carregamento do app */
-    }, [])
+    const updatedTvSeries = tvSeriesData.filter(tvSerie => {
+      const lowerTitle = tvSerie.name!.trim().toLowerCase();
 
-    useEffect(() => {
-        filterTvSeries()
-    }, [search])
+      return lowerTitle.includes(search.trim().toLowerCase());
+    });
 
-    return (
-        <ScreenLayout isLoading={isLoading}>
-            <TextInput 
-                placeholder="Pesquise..."
-                style={styles.searchInput} 
-                onChangeText={(text) => setSearch(text)}
-             />
-             {search.length > 0 ? 
-                 filteredTvSeries.length > 0 ? (
-                     <FlatList 
-                         data={filteredTvSeries} 
-                         keyExtractor={(item, index) => item.id + index} 
-                         numColumns={2}
-                         showsHorizontalScrollIndicator={false}
-                         renderItem={({ item }) => (
-                             <ItemDisplay item={item} />
-                         )}
-                     />
-                 ) : <Text style={styles.listEmptyText}>Nenhuma série encontrada</Text>
-             : 
-             <ScrollView showsVerticalScrollIndicator={false}>
-                 {tvSeries.map(category => (
-                     <View key={category.name} style={styles.moviesContainer}>
-                         <Text style={styles.movieContainerTitle}>{category.name}</Text>
-                         <FlatList 
-                             data={category.data}
-                             keyExtractor={(item) => item.id}
-                             horizontal
-                             showsHorizontalScrollIndicator={false}
-                             renderItem={({ item }) => (
-                                 <ItemDisplay item={item} />
-                             )}
-                         />
-                     </View>
-                 ))}
-             </ScrollView>
-             } 
-        </ScreenLayout>
-    )
+    setFilteredTvSeries(updatedTvSeries);
+  }
+
+  useEffect(() => {
+    filterTvSeries();
+  }, [search]);
+
+  return (
+    <ScreenLayout isLoading={!tvSeries.length}>
+      <TextInput
+        placeholder="Pesquise..."
+        style={styles.searchInput}
+        onChangeText={text => setSearch(text)}
+      />
+      {search.length > 0 ? (
+        <FlatList
+          data={filteredTvSeries}
+          keyExtractor={(item, index) => item.id + index}
+          showsHorizontalScrollIndicator={false}
+          numColumns={3}
+          ListEmptyComponent={
+            <Text style={styles.listEmptyText}>Nenhuma série encontrada</Text>
+          }
+          renderItem={({ item }) => <ItemDisplay item={item} recommendation />}
+        />
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {tvSeries.map(category => (
+            <View key={category.name} style={styles.moviesContainer}>
+              <Text style={styles.movieContainerTitle}>{category.name}</Text>
+              <FlatList
+                data={category.data}
+                keyExtractor={item => item.id}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item }) => <ItemDisplay item={item} />}
+              />
+            </View>
+          ))}
+        </ScrollView>
+      )}
+    </ScreenLayout>
+  );
 }

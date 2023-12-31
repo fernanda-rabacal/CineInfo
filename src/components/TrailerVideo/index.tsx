@@ -26,8 +26,6 @@ export function TrailerVideo({
     }
   }, [visible]);
 
-  console.log(trailerKey);
-
   /* useFocusEffect(
     useCallback(() => {
       ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
@@ -38,7 +36,7 @@ export function TrailerVideo({
   }, [trailerKey])); */
 
   return (
-    <Modal visible={visible}>
+    <Modal visible={visible} onRequestClose={() => onChangeVisible(false)}>
       <TouchableOpacity
         style={{position: 'absolute', top: 20, left: 20, zIndex: 10}}
         onPress={() => onChangeVisible(false)}>

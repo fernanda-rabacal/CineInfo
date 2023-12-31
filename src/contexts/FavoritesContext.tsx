@@ -1,65 +1,70 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, useEffect, useState } from "react";
-import { MovieOrSerie } from "../@types/movieOrSerie";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createContext, useEffect, useState } from 'react';
+import { MovieOrSerie } from '../@types/cineItems';
 
 interface FavoritesContextProps {
-  favorites: MovieOrSerie[]
-  addToFavorites: (item: MovieOrSerie) => void
-  removeFromFavorites: (itemId: string) => void
-  getFavorites: () => void
+  favorites: MovieOrSerie[];
+  addToFavorites: (item: MovieOrSerie) => void;
+  removeFromFavorites: (itemId: string) => void;
+  getFavorites: () => void;
 }
 
-export const FavoritesContext = createContext({} as FavoritesContextProps)
+export const FavoritesContext = createContext({} as FavoritesContextProps);
 
 export function FavoritesContextProvider({ children }) {
-  const [favorites, setFavorites] = useState<MovieOrSerie[]>([])
+  const [favorites, setFavorites] = useState<MovieOrSerie[]>([]);
 
   async function getFavorites() {
-    const items = await AsyncStorage.getItem("favorites")
+    const items = await AsyncStorage.getItem('favorites');
 
     if (items) {
-        setFavorites(JSON.parse(items))
+      setFavorites(JSON.parse(items));
     }
   }
 
   async function fetchFavorites() {
-    await AsyncStorage.setItem("favorites", JSON.stringify(favorites))
+    await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
   }
 
   async function addToFavorites(item: MovieOrSerie) {
-    const itemAlreadyFavorite = favorites.find(favorite => favorite.id === item.id)
-    
-    if(!itemAlreadyFavorite) {
-      setFavorites([...favorites, item])
+    const itemAlreadyFavorite = favorites.find(
+      favorite => favorite.id === item.id,
+    );
+
+    if (!itemAlreadyFavorite) {
+      setFavorites([...favorites, item]);
     }
   }
-  
+
   async function removeFromFavorites(itemId: string) {
-    const itemIsFavorite = favorites.find(favorite => favorite.id === itemId) 
-    
-    if(itemIsFavorite) {  
-      const updatedFavorites = favorites.filter(element => element.id !== itemId)
-      
-      setFavorites(updatedFavorites)
+    const itemIsFavorite = favorites.find(favorite => favorite.id === itemId);
+
+    if (itemIsFavorite) {
+      const updatedFavorites = favorites.filter(
+        element => element.id !== itemId,
+      );
+
+      setFavorites(updatedFavorites);
     }
-}
+  }
 
   useEffect(() => {
-    getFavorites()
-  }, [])
+    getFavorites();
+  }, []);
 
   useEffect(() => {
-    fetchFavorites()
-  }, [favorites])
+    fetchFavorites();
+  }, [favorites]);
 
   return (
-    <FavoritesContext.Provider value={{
-      favorites,
-      addToFavorites,
-      removeFromFavorites,
-      getFavorites
-    }}>
+    <FavoritesContext.Provider
+      value={{
+        favorites,
+        addToFavorites,
+        removeFromFavorites,
+        getFavorites,
+      }}>
       {children}
     </FavoritesContext.Provider>
-  )
+  );
 }

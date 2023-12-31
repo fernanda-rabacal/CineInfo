@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   image: {
@@ -10,6 +10,6 @@ export const styles = StyleSheet.create({
     width: 150,
     fontSize: 16,
     color: 'white',
-    textAlign: 'center'
-  }
-})
+    textAlign: 'center',
+  },
+});

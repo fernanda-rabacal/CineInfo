@@ -1,3 +1,10 @@
 {
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "noImplicitAny": false,
+    "types": [
+      "jest",
+    ]
+  },
   "extends": "@react-native/typescript-config/tsconfig.json"
 }
