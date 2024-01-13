@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import { styles } from './styles';
 import { ScreenLayout } from '../../components/ScreenLayout';
 import { Select } from '../../components/Select';
@@ -8,7 +8,7 @@ import { categories, genres, types } from '../../data/filterCategories';
 import { useCineItem } from '../../hooks/useData';
 
 export function Discover() {
-  const { cineItems } = useCineItem();
+  const { cineItems, setPage, isLoadingNewPage } = useCineItem();
 
   const [selectedTypeId, setSelectedTypeId] = useState(1);
   const [selectedGenreId, setSelectedGenreId] = useState(1);
@@ -20,13 +20,13 @@ export function Discover() {
     let isFromSelectedCategory = true;
 
     if (selectedGenreId !== 1) {
-      hasGenre = !!item.genre_ids.includes(selectedGenreId);
+      hasGenre = !!(item.genre_ids && item.genre_ids.includes(selectedGenreId));
     }
 
     if (selectedTypeId !== 1) {
       isFromSelectedType =
-        (selectedTypeId === 2 && !!item.title) ||
-        (selectedTypeId === 3 && !!item.name);
+        (selectedTypeId === 2 && !!Object.keys(item).includes('title')) ||
+        (selectedTypeId === 3 && !!Object.keys(item).includes('name'));
     }
 
     if (selectedCategoryId !== 1) {
@@ -35,6 +35,14 @@ export function Discover() {
 
     return hasGenre && isFromSelectedType && isFromSelectedCategory;
   });
+
+  function onEndReached() {
+    if (!isLoadingNewPage) {
+      setPage(prevPage => prevPage + 1);
+    }
+  }
+
+  console.log(cineItems.length);
 
   return (
     <ScreenLayout isLoading={!cineItems.length}>
@@ -56,13 +64,15 @@ export function Discover() {
           onChangeSelect={setSelectedCategoryId}
         />
       </View>
-      <ScrollView
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}>
-        {filteredItems.map((item, index) => (
-          <ItemDisplay key={item.id + index} item={item} recommendation />
-        ))}
-      </ScrollView>
+      <FlatList
+        data={filteredItems}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, index) => item.id + index.toString()}
+        numColumns={3}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.2}
+        renderItem={({ item }) => <ItemDisplay item={item} recommendation />}
+      />
     </ScreenLayout>
   );
 }

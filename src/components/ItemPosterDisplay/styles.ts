@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
     width: 115,
     height: 175,
     borderRadius: 5,
+    margin: 5,
   },
   title: {
     width: 150,

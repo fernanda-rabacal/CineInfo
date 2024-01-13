@@ -11,30 +11,30 @@ export function TvSeries() {
   const [search, setSearch] = useState('');
   const [filteredTvSeries, setFilteredTvSeries] = useState<TvSerie[]>([]);
 
-  function filterTvSeries() {
-    let tvSeriesData: TvSerie[] = [];
-
-    for (let category of tvSeries) {
-      tvSeriesData.push(...(category.data as TvSerie[]));
-    }
-
-    if (!search) {
-      setFilteredTvSeries([]);
-      return;
-    }
-
-    const updatedTvSeries = tvSeriesData.filter(tvSerie => {
-      const lowerTitle = tvSerie.name!.trim().toLowerCase();
-
-      return lowerTitle.includes(search.trim().toLowerCase());
-    });
-
-    setFilteredTvSeries(updatedTvSeries);
-  }
-
   useEffect(() => {
+    function filterTvSeries() {
+      let tvSeriesData: TvSerie[] = [];
+
+      for (let category of tvSeries) {
+        tvSeriesData.push(...(category.data as TvSerie[]));
+      }
+
+      if (!search) {
+        setFilteredTvSeries([]);
+        return;
+      }
+
+      const updatedTvSeries = tvSeriesData.filter(tvSerie => {
+        const lowerTitle = tvSerie.name!.trim().toLowerCase();
+
+        return lowerTitle.includes(search.trim().toLowerCase());
+      });
+
+      setFilteredTvSeries(updatedTvSeries);
+    }
+
     filterTvSeries();
-  }, [search]);
+  }, [search, tvSeries]);
 
   return (
     <ScreenLayout isLoading={!tvSeries.length}>

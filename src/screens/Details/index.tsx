@@ -28,7 +28,7 @@ export function Details({ navigation, route }) {
 
     return !!isFavorite;
   });
-  const [itemData, setItemData] = useState<DetailsProps>({});
+  const [itemData, setItemData] = useState<DetailsProps | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const [modalTrailerVisible, setModalTrailerVisible] = useState(false);
 
@@ -57,6 +57,10 @@ export function Details({ navigation, route }) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [item]),
   );
+
+  if (!itemData) {
+    return <></>;
+  }
 
   return (
     <ScreenLayout isLoading={isLoading}>

@@ -13,30 +13,30 @@ export function Movies() {
   const [search, setSearch] = useState('');
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
 
-  function filterMovies() {
-    let moviesData: Movie[] = [];
-
-    for (let category of movies) {
-      moviesData.push(...(category.data as Movie[]));
-    }
-
-    if (!search) {
-      setFilteredMovies([]);
-      return;
-    }
-
-    const updatedMovies = moviesData.filter(movie => {
-      const lowerTitle = movie.title!.trim().toLowerCase();
-
-      return lowerTitle.includes(search.trim().toLowerCase());
-    });
-
-    setFilteredMovies(updatedMovies);
-  }
-
   useEffect(() => {
+    function filterMovies() {
+      let moviesData: Movie[] = [];
+
+      for (let category of movies) {
+        moviesData.push(...(category.data as Movie[]));
+      }
+
+      if (!search) {
+        setFilteredMovies([]);
+        return;
+      }
+
+      const updatedMovies = moviesData.filter(movie => {
+        const lowerTitle = movie.title!.trim().toLowerCase();
+
+        return lowerTitle.includes(search.trim().toLowerCase());
+      });
+
+      setFilteredMovies(updatedMovies);
+    }
+
     filterMovies();
-  }, [search]);
+  }, [movies, search]);
 
   return (
     <ScreenLayout isLoading={!movies.length}>

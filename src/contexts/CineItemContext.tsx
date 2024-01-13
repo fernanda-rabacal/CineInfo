@@ -1,6 +1,13 @@
-import { createContext, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Movie, TvSerie } from '../@types/cineItems';
 import { api } from '../services/api';
+import { movieCategories, tvSerieCategories } from '../data/categories';
 
 export interface DetailsProps extends Movie, TvSerie {
   recommendations: (Movie | TvSerie)[];
@@ -12,10 +19,14 @@ interface CineItemContextProps {
   movies: CategoriesList[];
   tvSeries: CategoriesList[];
   cineItems: (Movie | TvSerie)[];
+  isLoadingNewPage: boolean;
   getDetails: (itemId: number, isMovie?: boolean) => Promise<DetailsProps>;
+  setPage: Dispatch<SetStateAction<number>>;
+  getDiscoverElements: () => void;
 }
 
 interface CategoriesList {
+  id: number;
   name: string;
   data: (Movie | TvSerie)[];
 }
@@ -29,10 +40,11 @@ function addCategoryToItems(items: (Movie | TvSerie)[], categoryId: number) {
 export const CineItemContext = createContext({} as CineItemContextProps);
 
 export function CineItemContextProvider({ children }) {
-  const [movies, setMovies] = useState<CategoriesList[]>([]);
-  const [tvSeries, setTvSeries] = useState<CategoriesList[]>([]);
+  const [movies, setMovies] = useState<CategoriesList[]>(movieCategories);
+  const [tvSeries, setTvSeries] = useState<CategoriesList[]>(tvSerieCategories);
   const [cineItems, setCineItems] = useState<(Movie | TvSerie)[]>([]);
   const [page, setPage] = useState(1);
+  const [isLoadingNewPage, setIsLoadingNewPage] = useState(false);
 
   async function getMovies() {
     const popularData = api.get(`/movie/popular?page=${page}`);
@@ -51,24 +63,23 @@ export function CineItemContextProvider({ children }) {
       const nowPlaying = addCategoryToItems(values[2].data.results, 6);
       const topRated = addCategoryToItems(values[3].data.results, 3);
 
-      setMovies([
-        {
-          name: 'Populares',
-          data: popular,
-        },
-        {
-          name: 'Lançamentos',
-          data: upcoming,
-        },
-        {
-          name: 'Mais Recentes',
-          data: nowPlaying,
-        },
-        {
-          name: 'Bem Avaliados',
-          data: topRated,
-        },
-      ]);
+      const moviesList = movies.map(categoryList => {
+        const correctList =
+          categoryList.id === 1
+            ? popular
+            : categoryList.id === 2
+            ? upcoming
+            : categoryList.id === 3
+            ? nowPlaying
+            : topRated;
+
+        return {
+          ...categoryList,
+          data: [...categoryList.data, ...correctList],
+        };
+      });
+
+      setMovies(moviesList);
     });
   }
 
@@ -89,28 +100,27 @@ export function CineItemContextProvider({ children }) {
       const airingToday = addCategoryToItems(values[2].data.results, 4);
       const onTheAir = addCategoryToItems(values[3].data.results, 5);
 
-      setTvSeries([
-        {
-          name: 'Populares',
-          data: popular,
-        },
-        {
-          name: 'Lançamentos',
-          data: airingToday,
-        },
-        {
-          name: 'No Ar Agora',
-          data: onTheAir,
-        },
-        {
-          name: 'Bem Avaliados',
-          data: topRated,
-        },
-      ]);
+      const tvSeriesList = tvSeries.map(categoryList => {
+        const correctList =
+          categoryList.id === 1
+            ? popular
+            : categoryList.id === 2
+            ? airingToday
+            : categoryList.id === 3
+            ? onTheAir
+            : topRated;
+
+        return {
+          ...categoryList,
+          data: [...categoryList.data, ...correctList],
+        };
+      });
+
+      setTvSeries(tvSeriesList);
     });
   }
 
-  async function getAllItemsList() {
+  async function getDiscoverElements() {
     let items: (Movie | TvSerie)[] = [];
 
     for (let category of movies) {
@@ -150,10 +160,13 @@ export function CineItemContextProvider({ children }) {
 
   useEffect(() => {
     async function callFunctions() {
+      setIsLoadingNewPage(true);
+
       await getTvSeries();
       await getMovies();
+      await getDiscoverElements();
 
-      getAllItemsList();
+      setIsLoadingNewPage(false);
     }
 
     callFunctions();
@@ -165,8 +178,11 @@ export function CineItemContextProvider({ children }) {
       value={{
         movies,
         tvSeries,
-        getDetails,
+        isLoadingNewPage,
         cineItems,
+        getDetails,
+        setPage,
+        getDiscoverElements,
       }}>
       {children}
     </CineItemContext.Provider>
