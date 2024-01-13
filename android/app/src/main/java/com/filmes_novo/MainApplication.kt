@@ -1,4 +1,4 @@
-package com.filmes_novo
+package com.filmes
 
 import android.app.Application
 import com.facebook.react.PackageList

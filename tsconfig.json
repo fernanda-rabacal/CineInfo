@@ -1,4 +1,8 @@
 {
+  "lib": [
+    "es2018",
+    "dom"
+  ],
   "compilerOptions": {
     "jsx": "react-jsx",
     "noImplicitAny": false,

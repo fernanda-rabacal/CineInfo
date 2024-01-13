@@ -4,6 +4,8 @@ export interface CineItem {
   poster_path: string;
   overview: string;
   vote_average: number;
+  category_id: number;
+  genre_ids?: number[];
   genres: {
     id: number;
     name: string;

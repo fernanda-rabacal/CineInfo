@@ -87,10 +87,26 @@ export const types = [
 export const categories = [
   {
     id: 1,
-    name: 'Populares',
+    name: 'Todas',
   },
   {
     id: 2,
+    name: 'Populares',
+  },
+  {
+    id: 3,
+    name: 'Bem avaliados',
+  },
+  {
+    id: 4,
     name: 'Lançamentos',
+  },
+  {
+    id: 5,
+    name: 'No Ar Agora',
+  },
+  {
+    id: 6,
+    name: 'Mais Recentes',
   },
 ];

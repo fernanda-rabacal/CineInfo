@@ -20,63 +20,94 @@ interface CategoriesList {
   data: (Movie | TvSerie)[];
 }
 
+function addCategoryToItems(items: (Movie | TvSerie)[], categoryId: number) {
+  return items.map(item => {
+    return { ...item, category_id: categoryId };
+  });
+}
+
 export const CineItemContext = createContext({} as CineItemContextProps);
 
 export function CineItemContextProvider({ children }) {
   const [movies, setMovies] = useState<CategoriesList[]>([]);
   const [tvSeries, setTvSeries] = useState<CategoriesList[]>([]);
   const [cineItems, setCineItems] = useState<(Movie | TvSerie)[]>([]);
+  const [page, setPage] = useState(1);
 
   async function getMovies() {
-    const popularData = await api.get('/movie/popular');
-    const upcomingData = await api.get('/movie/upcoming');
-    const nowPlayingData = await api.get('/movie/now_playing');
-    const topRatedData = await api.get('/movie/top_rated');
+    const popularData = api.get(`/movie/popular?page=${page}`);
+    const upcomingData = api.get(`/movie/upcoming?page=${page}`);
+    const nowPlayingData = api.get(`/movie/now_playing?page=${page}`);
+    const topRatedData = api.get(`/movie/top_rated?page=${page}`);
 
-    setMovies([
-      {
-        name: 'Populares',
-        data: popularData.data.results,
-      },
-      {
-        name: 'Lançamentos',
-        data: upcomingData.data.results,
-      },
-      {
-        name: 'Mais Recentes',
-        data: nowPlayingData.data.results,
-      },
-      {
-        name: 'Bem Avaliados',
-        data: topRatedData.data.results,
-      },
-    ]);
+    await Promise.all([
+      popularData,
+      upcomingData,
+      nowPlayingData,
+      topRatedData,
+    ]).then(values => {
+      const popular = addCategoryToItems(values[0].data.results, 2);
+      const upcoming = addCategoryToItems(values[1].data.results, 4);
+      const nowPlaying = addCategoryToItems(values[2].data.results, 6);
+      const topRated = addCategoryToItems(values[3].data.results, 3);
+
+      setMovies([
+        {
+          name: 'Populares',
+          data: popular,
+        },
+        {
+          name: 'Lançamentos',
+          data: upcoming,
+        },
+        {
+          name: 'Mais Recentes',
+          data: nowPlaying,
+        },
+        {
+          name: 'Bem Avaliados',
+          data: topRated,
+        },
+      ]);
+    });
   }
 
   async function getTvSeries() {
-    const popularData = await api.get('/tv/popular');
-    const topRatedData = await api.get('/tv/top_rated');
-    const airingTodayData = await api.get('/tv/airing_today');
-    const onTheAirData = await api.get('/tv/on_the_air');
+    const popularData = api.get(`/tv/popular?page=${page}`);
+    const topRatedData = api.get(`/tv/top_rated?page=${page}`);
+    const airingTodayData = api.get(`/tv/airing_today?page=${page}`);
+    const onTheAirData = api.get(`/tv/on_the_air?page=${page}`);
 
-    setTvSeries([
-      {
-        name: 'Populares',
-        data: popularData.data.results,
-      },
-      {
-        name: 'Lançamentos',
-        data: airingTodayData.data.results,
-      },
-      {
-        name: 'No Ar Agora',
-        data: onTheAirData.data.results,
-      },
-      {
-        name: 'Bem Avaliados',
-        data: topRatedData.data.results,
-      },
-    ]);
+    await Promise.all([
+      popularData,
+      topRatedData,
+      airingTodayData,
+      onTheAirData,
+    ]).then(values => {
+      const popular = addCategoryToItems(values[0].data.results, 2);
+      const topRated = addCategoryToItems(values[1].data.results, 3);
+      const airingToday = addCategoryToItems(values[2].data.results, 4);
+      const onTheAir = addCategoryToItems(values[3].data.results, 5);
+
+      setTvSeries([
+        {
+          name: 'Populares',
+          data: popular,
+        },
+        {
+          name: 'Lançamentos',
+          data: airingToday,
+        },
+        {
+          name: 'No Ar Agora',
+          data: onTheAir,
+        },
+        {
+          name: 'Bem Avaliados',
+          data: topRated,
+        },
+      ]);
+    });
   }
 
   async function getAllItemsList() {
@@ -127,7 +158,7 @@ export function CineItemContextProvider({ children }) {
 
     callFunctions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page]);
 
   return (
     <CineItemContext.Provider
