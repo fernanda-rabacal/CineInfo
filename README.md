@@ -7,7 +7,7 @@ This is a mobile app where you can find movies and tv series, see the details, r
 - Making search functionality on Discover screen
 - Possibility of reviewing the cine item
 
-- ## Skills 🧰
+## Skills 🧰
 <div>
   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">  
   <img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" /> 
