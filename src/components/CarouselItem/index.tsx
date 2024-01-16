@@ -1,4 +1,4 @@
-import { TouchableOpacityProps } from 'react-native';
+import { TouchableOpacityProps, Dimensions } from 'react-native';
 import { CarouselItemContainer, PosterImage, Title } from './styles';
 import { useNavigation } from '@react-navigation/native';
 
@@ -24,7 +24,10 @@ export function CarouselItem({
     <CarouselItemContainer
       {...rest}
       onPress={() => navigation.navigate('Details', { itemId, isMovie })}>
-      <PosterImage source={{ uri: imageUrl }} />
+      <PosterImage
+        source={{ uri: imageUrl }}
+        style={{ width: Dimensions.get('screen').width }}
+      />
       <Title>{title}</Title>
     </CarouselItemContainer>
   );

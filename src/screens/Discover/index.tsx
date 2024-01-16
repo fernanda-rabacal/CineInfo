@@ -1,18 +1,23 @@
-import { useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { FlatList, Text, TextInput, View } from 'react-native';
 import { styles } from './styles';
 import { ScreenLayout } from '../../components/ScreenLayout';
 import { Select } from '../../components/Select';
 import { ItemDisplay } from '../../components/ItemPosterDisplay';
 import { categories, genres, types } from '../../data/filterCategories';
 import { useCineItem } from '../../hooks/useData';
+import { MagnifyingGlass } from 'phosphor-react-native';
+import { TvSerie } from '../../@types/cineItems';
 
 export function Discover() {
   const { cineItems, setPage, isLoadingNewPage } = useCineItem();
 
+  const [search, setSearch] = useState('');
   const [selectedTypeId, setSelectedTypeId] = useState(1);
   const [selectedGenreId, setSelectedGenreId] = useState(1);
   const [selectedCategoryId, setSelectedCategoryId] = useState(1);
+
+  const [searchResultItems, setSearchResultItems] = useState<(Movie & TvSerie)[]>([]);
 
   const filteredItems = cineItems.filter(item => {
     let hasGenre = true;
@@ -42,11 +47,35 @@ export function Discover() {
     }
   }
 
-  console.log(cineItems.length);
+  useEffect(() => {
+    function filterItems() {
+      if (!search) {
+        setSearchResultItems([]);
+        return;
+      }
+
+      const resultItems = cineItems.filter(item => {
+        const lowerTitle = (item.title || item.name).trim().toLowerCase();
+
+        return lowerTitle.includes(search.trim().toLowerCase());
+      });
+
+      setSearchResultItems(resultItems);
+    }
+
+    filterItems();
+  }, [cineItems, search]);
 
   return (
     <ScreenLayout isLoading={!cineItems.length}>
-      <Text>Discover</Text>
+      <View style={styles.searchInput}>
+        <MagnifyingGlass color="#dedede" size={20} />
+        <TextInput
+          placeholder="Pesquise..."
+          style={{ flex: 1 }}
+          onChangeText={text => setSearch(text)}
+        />
+      </View>
       <View style={styles.selectContainer}>
         <Select
           title="Tipos"
@@ -71,7 +100,14 @@ export function Discover() {
         numColumns={3}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.2}
-        renderItem={({ item }) => <ItemDisplay item={item} recommendation />}
+        renderItem={({ item }) => (
+          <ItemDisplay
+            isMovie={!!item.title}
+            posterPath={item.poster_path}
+            itemId={item.id}
+            recommendation
+          />
+        )}
       />
     </ScreenLayout>
   );

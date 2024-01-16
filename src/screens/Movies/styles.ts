@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
   },
   moviesContainer: {
     marginBottom: 30,
+    paddingHorizontal: 20,
   },
   movieContainerTitle: {
     fontSize: 20,
