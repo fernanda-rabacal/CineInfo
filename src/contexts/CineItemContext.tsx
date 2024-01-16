@@ -10,7 +10,7 @@ import { api } from '../services/api';
 import { movieCategories, tvSerieCategories } from '../data/categories';
 
 export interface DetailsProps extends Movie, TvSerie {
-  recommendations: (Movie | TvSerie)[];
+  recommendations: (Movie & TvSerie)[];
   formattedReleaseDate: string;
   trailerKey: string;
 }

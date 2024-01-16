@@ -58,7 +58,14 @@ export function Movies() {
           keyExtractor={(item, index) => item.id + index}
           numColumns={3}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => <ItemDisplay item={item} recommendation />}
+          renderItem={({ item }) => (
+            <ItemDisplay
+              isMovie={true}
+              posterPath={item.poster_path}
+              itemId={item.id}
+              recommendation
+            />
+          )}
         />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -70,7 +77,13 @@ export function Movies() {
                 keyExtractor={item => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => <ItemDisplay item={item} />}
+                renderItem={({ item }) => (
+                  <ItemDisplay
+                    isMovie={true}
+                    posterPath={item.poster_path}
+                    itemId={item.id}
+                  />
+                )}
               />
             </View>
           ))}

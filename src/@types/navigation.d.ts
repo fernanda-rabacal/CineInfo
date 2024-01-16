@@ -1,5 +1,3 @@
-import { MovieOrSerie } from './cineItems';
-
 export declare global {
   namespace ReactNavigation {
     interface RootParamList {
@@ -7,7 +5,7 @@ export declare global {
       Favorites: undefined;
       TvSeries: undefined;
       Discover: undefined;
-      Details: { item: MovieOrSerie };
+      Details: { itemId: string; isMovie: boolean };
     }
   }
 }

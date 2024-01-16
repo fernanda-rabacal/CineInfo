@@ -19,16 +19,16 @@ import { useFavorite } from '../../hooks/useFavorite';
 import { useCineItem } from '../../hooks/useData';
 
 export function Details({ navigation, route }) {
-  const { item } = route.params;
+  const { itemId, isMovie } = route.params;
   const { favorites, addToFavorites, removeFromFavorites } = useFavorite();
   const { getDetails } = useCineItem();
 
   const [isFavorited, setIsFavorited] = useState(() => {
-    const isFavorite = favorites.find(favorite => favorite.id === item.id);
+    const isFavorite = favorites.find(favorite => favorite.id === itemId);
 
     return !!isFavorite;
   });
-  const [itemData, setItemData] = useState<DetailsProps | undefined>();
+  const [itemData, setItemData] = useState<DetailsProps>();
   const [isLoading, setIsLoading] = useState(true);
   const [modalTrailerVisible, setModalTrailerVisible] = useState(false);
 
@@ -39,13 +39,13 @@ export function Details({ navigation, route }) {
   }
 
   function handleRemoveFromFavorites() {
-    removeFromFavorites(item.id);
+    removeFromFavorites(itemId);
 
     setIsFavorited(false);
   }
 
   async function getItemsData() {
-    const details = await getDetails(item.id, !!item.title);
+    const details = await getDetails(itemId, isMovie);
 
     setItemData(details);
     setIsLoading(false);
@@ -55,7 +55,7 @@ export function Details({ navigation, route }) {
     useCallback(() => {
       getItemsData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [item]),
+    }, [itemId]),
   );
 
   if (!itemData) {
@@ -107,7 +107,7 @@ export function Details({ navigation, route }) {
           )}
           <View style={styles.dataContainer}>
             <Star color="#ffb42a" size={17} />
-            <Text style={styles.text}>{item.vote_average.toFixed(1)}</Text>
+            <Text style={styles.text}>{itemData.vote_average.toFixed(1)}</Text>
           </View>
 
           <TouchableOpacity
@@ -148,7 +148,9 @@ export function Details({ navigation, route }) {
               {itemData.recommendations.map(recommedation => (
                 <ItemDisplay
                   key={recommedation.id}
-                  item={recommedation}
+                  isMovie={!!recommedation.title}
+                  posterPath={recommedation.poster_path}
+                  itemId={recommedation.id}
                   recommendation
                 />
               ))}

@@ -1,24 +1,29 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useEffect, useState } from 'react';
-import { MovieOrSerie } from '../@types/cineItems';
+import { Movie, TvSerie } from '../@types/cineItems';
 
 interface FavoritesContextProps {
-  favorites: MovieOrSerie[];
-  addToFavorites: (item: MovieOrSerie) => void;
-  removeFromFavorites: (itemId: string) => void;
-  getFavorites: () => void;
+  favorites: (Movie | TvSerie)[];
+  addToFavorites: (item: Movie | TvSerie) => Promise<void>;
+  removeFromFavorites: (itemId: string) => Promise<void>;
+  getFavorites: () => Promise<void>;
 }
 
 export const FavoritesContext = createContext({} as FavoritesContextProps);
 
 export function FavoritesContextProvider({ children }) {
-  const [favorites, setFavorites] = useState<MovieOrSerie[]>([]);
+  const [favorites, setFavorites] = useState<(Movie | TvSerie)[]>([]);
 
   async function getFavorites() {
-    const items = await AsyncStorage.getItem('favorites');
+    try {
+      const items = await AsyncStorage.getItem('favorites');
 
-    if (items) {
-      setFavorites(JSON.parse(items));
+      if (items) {
+        setFavorites(JSON.parse(items));
+      }
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -26,7 +31,7 @@ export function FavoritesContextProvider({ children }) {
     await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
   }
 
-  async function addToFavorites(item: MovieOrSerie) {
+  async function addToFavorites(item: Movie | TvSerie) {
     const itemAlreadyFavorite = favorites.find(
       favorite => favorite.id === item.id,
     );

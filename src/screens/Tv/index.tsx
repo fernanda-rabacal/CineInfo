@@ -52,7 +52,14 @@ export function TvSeries() {
           ListEmptyComponent={
             <Text style={styles.listEmptyText}>Nenhuma série encontrada</Text>
           }
-          renderItem={({ item }) => <ItemDisplay item={item} recommendation />}
+          renderItem={({ item }) => (
+            <ItemDisplay
+              isMovie={false}
+              posterPath={item.poster_path}
+              itemId={item.id}
+              recommendation
+            />
+          )}
         />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -64,7 +71,13 @@ export function TvSeries() {
                 keyExtractor={item => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => <ItemDisplay item={item} />}
+                renderItem={({ item }) => (
+                  <ItemDisplay
+                    isMovie={false}
+                    posterPath={item.poster_path}
+                    itemId={item.id}
+                  />
+                )}
               />
             </View>
           ))}
