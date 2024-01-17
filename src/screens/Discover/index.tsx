@@ -1,13 +1,23 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Text, TextInput, View } from 'react-native';
+import {
+  FlatList,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { CaretLeft, MagnifyingGlass } from 'phosphor-react-native';
+import Modal from 'react-native-modal';
+
 import { styles } from './styles';
 import { ScreenLayout } from '../../components/ScreenLayout';
 import { Select } from '../../components/Select';
 import { ItemDisplay } from '../../components/ItemPosterDisplay';
-import { categories, genres, types } from '../../data/filterCategories';
+
 import { useCineItem } from '../../hooks/useData';
-import { MagnifyingGlass } from 'phosphor-react-native';
-import { TvSerie } from '../../@types/cineItems';
+import { Movie, TvSerie } from '../../@types/cineItems';
+import { categories, genres, types } from '../../data/filterCategories';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function Discover() {
   const { cineItems, setPage, isLoadingNewPage } = useCineItem();
@@ -16,8 +26,11 @@ export function Discover() {
   const [selectedTypeId, setSelectedTypeId] = useState(1);
   const [selectedGenreId, setSelectedGenreId] = useState(1);
   const [selectedCategoryId, setSelectedCategoryId] = useState(1);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const [searchResultItems, setSearchResultItems] = useState<(Movie & TvSerie)[]>([]);
+  const [searchResultItems, setSearchResultItems] = useState<
+    (Movie | TvSerie)[]
+  >([]);
 
   const filteredItems = cineItems.filter(item => {
     let hasGenre = true;
@@ -47,68 +60,125 @@ export function Discover() {
     }
   }
 
-  useEffect(() => {
-    function filterItems() {
-      if (!search) {
-        setSearchResultItems([]);
-        return;
-      }
+  function toggleModal() {
+    setModalVisible(prevState => !prevState);
+  }
 
-      const resultItems = cineItems.filter(item => {
-        const lowerTitle = (item.title || item.name).trim().toLowerCase();
+  function handleSearchItems() {
+    setModalVisible(true);
 
-        return lowerTitle.includes(search.trim().toLowerCase());
-      });
-
-      setSearchResultItems(resultItems);
+    if (!search) {
+      setSearchResultItems([]);
+      return;
     }
 
-    filterItems();
-  }, [cineItems, search]);
+    const resultItems = cineItems.filter(item => {
+      const lowerTitle = (item.title || item.name).trim().toLowerCase();
+
+      return lowerTitle.includes(search.trim().toLowerCase());
+    });
+
+    setSearchResultItems(resultItems);
+  }
 
   return (
-    <ScreenLayout isLoading={!cineItems.length}>
-      <View style={styles.searchInput}>
-        <MagnifyingGlass color="#dedede" size={20} />
-        <TextInput
-          placeholder="Pesquise..."
-          style={{ flex: 1 }}
-          onChangeText={text => setSearch(text)}
-        />
-      </View>
-      <View style={styles.selectContainer}>
-        <Select
-          title="Tipos"
-          options={types}
-          onChangeSelect={setSelectedTypeId}
-        />
-        <Select
-          title="Gêneros"
-          options={genres}
-          onChangeSelect={setSelectedGenreId}
-        />
-        <Select
-          title="Categorias"
-          options={categories}
-          onChangeSelect={setSelectedCategoryId}
-        />
-      </View>
-      <FlatList
-        data={filteredItems}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => item.id + index.toString()}
-        numColumns={3}
-        onEndReached={onEndReached}
-        onEndReachedThreshold={0.2}
-        renderItem={({ item }) => (
-          <ItemDisplay
-            isMovie={!!item.title}
-            posterPath={item.poster_path}
-            itemId={item.id}
-            recommendation
+    <>
+      <SafeAreaView>
+        <Modal
+          animationIn="slideInRight"
+          animationOut="slideOutRight"
+          style={styles.modalContainer}
+          isVisible={modalVisible}
+          animationInTiming={500}>
+          <View style={styles.modalContent}>
+            <View style={styles.gotBackContainer}>
+              <TouchableOpacity onPress={toggleModal}>
+                <CaretLeft color="#dddddd" size={28} />
+              </TouchableOpacity>
+              <View style={[styles.searchInput, { flex: 1 }]}>
+                <MagnifyingGlass color="#dedede" size={20} />
+                <TextInput
+                  placeholder="Pesquise..."
+                  onChangeText={text => setSearch(text)}
+                  onSubmitEditing={handleSearchItems}
+                  returnKeyType="search"
+                  value={search}
+                />
+              </View>
+            </View>
+
+            <FlatList
+              data={searchResultItems}
+              ListEmptyComponent={
+                <Text style={styles.noDataFoundText}>
+                  Nenhum Resultado encontrado
+                </Text>
+              }
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => item.id + index.toString()}
+              numColumns={3}
+              onEndReached={onEndReached}
+              onEndReachedThreshold={0.2}
+              renderItem={({ item }) => (
+                <ItemDisplay
+                  isMovie={!!item.title}
+                  posterPath={item.poster_path}
+                  itemId={item.id}
+                  recommendation
+                />
+              )}
+            />
+          </View>
+        </Modal>
+      </SafeAreaView>
+
+      <ScreenLayout isLoading={!cineItems.length}>
+        <View style={styles.container}>
+          <View style={styles.searchInput}>
+            <MagnifyingGlass color="#dedede" size={20} />
+            <TextInput
+              placeholder="Pesquise..."
+              onChangeText={text => setSearch(text)}
+              onSubmitEditing={handleSearchItems}
+              returnKeyType="search"
+              value={search}
+            />
+          </View>
+          <View style={styles.selectContainer}>
+            <Select
+              title="Tipos"
+              options={types}
+              onChangeSelect={setSelectedTypeId}
+            />
+            <Select
+              title="Gêneros"
+              options={genres}
+              onChangeSelect={setSelectedGenreId}
+            />
+            <Select
+              title="Categorias"
+              options={categories}
+              onChangeSelect={setSelectedCategoryId}
+            />
+          </View>
+          <FlatList
+            data={filteredItems}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => item.id + index.toString()}
+            numColumns={3}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.2}
+            renderItem={({ item }) => (
+              <ItemDisplay
+                isMovie={!!item.title}
+                posterPath={item.poster_path}
+                itemId={item.id}
+                recommendation
+              />
+            )}
           />
-        )}
-      />
-    </ScreenLayout>
+        </View>
+      </ScreenLayout>
+    </>
   );
 }

@@ -1,16 +1,28 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  SafeAreaViewProps,
+} from 'react-native-safe-area-context';
 import { Loader } from '../Loader';
 import { styles } from './styles';
-import { ScrollView } from 'react-native';
+import { ReactNode } from 'react';
 
-export function ScreenLayout({ children, isLoading = false }) {
+interface ScreenLayoutProps extends SafeAreaViewProps {
+  children: ReactNode;
+  isLoading?: boolean;
+}
+
+export function ScreenLayout({
+  children,
+  isLoading = false,
+  ...rest
+}: ScreenLayoutProps) {
   if (isLoading) {
     return <Loader />;
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>{children}</ScrollView>
+    <SafeAreaView style={styles.container} {...rest}>
+      {children}
     </SafeAreaView>
   );
 }
