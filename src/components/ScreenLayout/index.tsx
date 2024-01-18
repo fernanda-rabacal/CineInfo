@@ -14,6 +14,7 @@ interface ScreenLayoutProps extends SafeAreaViewProps {
 export function ScreenLayout({
   children,
   isLoading = false,
+  style,
   ...rest
 }: ScreenLayoutProps) {
   if (isLoading) {
@@ -21,7 +22,7 @@ export function ScreenLayout({
   }
 
   return (
-    <SafeAreaView style={styles.container} {...rest}>
+    <SafeAreaView style={[styles.container, style]} {...rest}>
       {children}
     </SafeAreaView>
   );

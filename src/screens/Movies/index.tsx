@@ -1,4 +1,4 @@
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, ScrollView, Text, View } from 'react-native';
 import { styles } from './styles';
 import { ItemDisplay } from '../../components/ItemPosterDisplay';
 import { ScreenLayout } from '../../components/ScreenLayout';
@@ -10,26 +10,28 @@ export function Movies() {
 
   return (
     <ScreenLayout isLoading={!movies.length}>
-      <CustomCarousel items={[...new Array(6)]} />
+      <ScrollView>
+        <CustomCarousel items={[...new Array(6)]} />
 
-      {movies.map(category => (
-        <View key={category.name} style={styles.moviesContainer}>
-          <Text style={styles.movieContainerTitle}>{category.name}</Text>
-          <FlatList
-            data={category.data}
-            keyExtractor={item => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <ItemDisplay
-                isMovie={true}
-                posterPath={item.poster_path}
-                itemId={item.id}
-              />
-            )}
-          />
-        </View>
-      ))}
+        {movies.map(category => (
+          <View key={category.name} style={styles.moviesContainer}>
+            <Text style={styles.movieContainerTitle}>{category.name}</Text>
+            <FlatList
+              data={category.data}
+              keyExtractor={item => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <ItemDisplay
+                  isMovie={true}
+                  posterPath={item.poster_path}
+                  itemId={item.id}
+                />
+              )}
+            />
+          </View>
+        ))}
+      </ScrollView>
     </ScreenLayout>
   );
 }

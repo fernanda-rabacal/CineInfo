@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   image: {
     width: 115,
     height: 175,
-    borderRadius: 5,
+    borderRadius: 6,
     margin: 5,
   },
   title: {

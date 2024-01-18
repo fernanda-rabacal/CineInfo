@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/DEFAULT" />
+    <item
+            android:drawable="@mipmap/movies_podcast"
+            android:gravity="center"
+            android:layout_width="100px"
+            android:layout_height="100px"
+    />
+</layer-list>

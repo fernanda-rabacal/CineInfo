@@ -63,7 +63,7 @@ export function Details({ navigation, route }) {
   }
 
   return (
-    <ScreenLayout isLoading={isLoading}>
+    <ScreenLayout isLoading={isLoading} style={styles.container}>
       <TrailerVideo
         trailerKey={itemData.trailerKey}
         visible={modalTrailerVisible}
@@ -79,7 +79,7 @@ export function Details({ navigation, route }) {
         <Image
           style={styles.poster}
           source={{
-            uri: `https://image.tmdb.org/t/p/w500${item.backdrop_path}`,
+            uri: `https://image.tmdb.org/t/p/w500${itemData.backdrop_path}`,
           }}
         />
         <Text style={styles.title}>{itemData.title || itemData.name}</Text>

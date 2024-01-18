@@ -33,5 +33,6 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: '#ebe6ee',
     marginBottom: 10,
+    fontFamily: 'Poppins-Regular',
   },
 });
