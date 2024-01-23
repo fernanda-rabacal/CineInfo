@@ -23,12 +23,16 @@ export function FavoritesContextProvider({ children }) {
         setFavorites(JSON.parse(items));
       }
     } catch (error) {
-      throw error;
+      console.error('Error retrieving data');
     }
   }
 
   async function fetchFavorites() {
-    await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+    try {
+      await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+    } catch (error) {
+      console.error('Error storaging data');
+    }
   }
 
   async function addToFavorites(item: Movie | TvSerie) {

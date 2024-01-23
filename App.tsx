@@ -1,6 +1,6 @@
 import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { RouterTabs } from './src/routes/routerTabs';
+import { Router } from './src/routes';
 import { FavoritesContextProvider } from './src/contexts/FavoritesContext';
 import { CineItemContextProvider } from './src/contexts/CineItemContext';
 
@@ -9,7 +9,7 @@ export default function App() {
     <NavigationContainer>
       <CineItemContextProvider>
         <FavoritesContextProvider>
-          <RouterTabs />
+          <Router />
         </FavoritesContextProvider>
       </CineItemContextProvider>
       <StatusBar barStyle={'default'} translucent />

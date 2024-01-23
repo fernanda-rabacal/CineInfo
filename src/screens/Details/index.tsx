@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { styles } from './styles';
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
@@ -28,7 +29,7 @@ export function Details({ navigation, route }) {
 
     return !!isFavorite;
   });
-  const [itemData, setItemData] = useState<DetailsProps>();
+  const [itemData, setItemData] = useState({} as DetailsProps);
   const [isLoading, setIsLoading] = useState(true);
   const [modalTrailerVisible, setModalTrailerVisible] = useState(false);
 
@@ -54,7 +55,6 @@ export function Details({ navigation, route }) {
   useFocusEffect(
     useCallback(() => {
       getItemsData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemId]),
   );
 

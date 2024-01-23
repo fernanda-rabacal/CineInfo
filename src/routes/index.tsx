@@ -27,7 +27,7 @@ export type AppScreensNavigationProps = {
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRouteProps>();
 
-export function RouterTabs() {
+export function Router() {
   return (
     <Navigator
       screenOptions={{
