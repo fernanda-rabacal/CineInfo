@@ -1,6 +1,12 @@
-import { TouchableOpacityProps, Dimensions } from 'react-native';
-import { CarouselItemContainer, PosterImage, Title } from './styles';
+import {
+  TouchableOpacityProps,
+  Text,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+import { styles } from './styles';
 
 interface CarouselItemProps extends TouchableOpacityProps {
   posterPath: string;
@@ -21,14 +27,16 @@ export function CarouselItem({
   const navigation = useNavigation();
 
   return (
-    <CarouselItemContainer
+    <TouchableOpacity
+      style={styles.container}
       {...rest}
       onPress={() => navigation.navigate('Details', { itemId, isMovie })}>
-      <PosterImage
-        source={{ uri: imageUrl }}
-        style={{ width: Dimensions.get('screen').width }}
-      />
-      <Title>{title}</Title>
-    </CarouselItemContainer>
+      <LinearGradient
+        colors={['#49494900', '#000000d2']}
+        style={{ height: '100%', width: '100%' }}>
+        <Image source={{ uri: imageUrl }} style={styles.image} />
+        <Text style={styles.title}>{title}</Text>
+      </LinearGradient>
+    </TouchableOpacity>
   );
 }

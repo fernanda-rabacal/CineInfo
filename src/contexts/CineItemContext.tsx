@@ -9,6 +9,14 @@ import { Movie, TvSerie } from '../@types/cineItems';
 import { api } from '../services/api';
 import { movieCategories, tvSerieCategories } from '../data/categories';
 
+enum CategoriesFilter {
+  POPULAR = 2,
+  TOP_RATED,
+  UPCOMING,
+  ON_THE_AIR,
+  NOW_PLAYING,
+}
+
 export interface DetailsProps extends Movie, TvSerie {
   recommendations: (Movie & TvSerie)[];
   formattedReleaseDate: string;
@@ -20,12 +28,12 @@ interface CineItemContextProps {
   tvSeries: CategoriesList[];
   cineItems: (Movie | TvSerie)[];
   isLoadingNewPage: boolean;
-  getDetails: (itemId: number, isMovie?: boolean) => Promise<DetailsProps>;
   setPage: Dispatch<SetStateAction<number>>;
   getDiscoverElements: () => void;
+  getDetails: (itemId: number, isMovie?: boolean) => Promise<DetailsProps>;
 }
 
-interface CategoriesList {
+export interface CategoriesList {
   id: number;
   name: string;
   data: (Movie | TvSerie)[];
@@ -59,10 +67,22 @@ export function CineItemContextProvider({ children }) {
         nowPlayingData,
         topRatedData,
       ]).then(values => {
-        const popular = addCategoryToItems(values[0].data.results, 2);
-        const upcoming = addCategoryToItems(values[1].data.results, 4);
-        const nowPlaying = addCategoryToItems(values[2].data.results, 6);
-        const topRated = addCategoryToItems(values[3].data.results, 3);
+        const popular = addCategoryToItems(
+          values[0].data.results,
+          CategoriesFilter.POPULAR,
+        );
+        const upcoming = addCategoryToItems(
+          values[1].data.results,
+          CategoriesFilter.UPCOMING,
+        );
+        const nowPlaying = addCategoryToItems(
+          values[2].data.results,
+          CategoriesFilter.NOW_PLAYING,
+        );
+        const topRated = addCategoryToItems(
+          values[3].data.results,
+          CategoriesFilter.TOP_RATED,
+        );
 
         const moviesList = movies.map(categoryList => {
           const correctList =
@@ -100,10 +120,22 @@ export function CineItemContextProvider({ children }) {
         airingTodayData,
         onTheAirData,
       ]).then(values => {
-        const popular = addCategoryToItems(values[0].data.results, 2);
-        const topRated = addCategoryToItems(values[1].data.results, 3);
-        const airingToday = addCategoryToItems(values[2].data.results, 4);
-        const onTheAir = addCategoryToItems(values[3].data.results, 5);
+        const popular = addCategoryToItems(
+          values[0].data.results,
+          CategoriesFilter.POPULAR,
+        );
+        const topRated = addCategoryToItems(
+          values[1].data.results,
+          CategoriesFilter.TOP_RATED,
+        );
+        const airingToday = addCategoryToItems(
+          values[2].data.results,
+          CategoriesFilter.UPCOMING,
+        );
+        const onTheAir = addCategoryToItems(
+          values[3].data.results,
+          CategoriesFilter.ON_THE_AIR,
+        );
 
         const tvSeriesList = tvSeries.map(categoryList => {
           const correctList =

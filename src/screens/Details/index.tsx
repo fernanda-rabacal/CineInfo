@@ -30,8 +30,9 @@ export function Details({ navigation, route }) {
     return !!isFavorite;
   });
   const [itemData, setItemData] = useState({} as DetailsProps);
-  const [isLoading, setIsLoading] = useState(true);
   const [modalTrailerVisible, setModalTrailerVisible] = useState(false);
+
+  const isLoading = Object.keys(itemData).length === 0;
 
   function handleAddToFavorites() {
     addToFavorites(itemData);
@@ -49,7 +50,6 @@ export function Details({ navigation, route }) {
     const details = await getDetails(itemId, isMovie);
 
     setItemData(details);
-    setIsLoading(false);
   }
 
   useFocusEffect(
@@ -58,10 +58,6 @@ export function Details({ navigation, route }) {
     }, [itemId]),
   );
 
-  if (!itemData) {
-    return <></>;
-  }
-
   return (
     <ScreenLayout isLoading={isLoading} style={styles.container}>
       <TrailerVideo
@@ -69,7 +65,6 @@ export function Details({ navigation, route }) {
         visible={modalTrailerVisible}
         onChangeVisible={setModalTrailerVisible}
       />
-
       <TouchableOpacity
         style={styles.backBtn}
         onPress={() => navigation.goBack()}>
@@ -107,7 +102,9 @@ export function Details({ navigation, route }) {
           )}
           <View style={styles.dataContainer}>
             <Star color="#ffb42a" size={17} />
-            <Text style={styles.text}>{itemData.vote_average.toFixed(1)}</Text>
+            <Text style={styles.text}>
+              {itemData.vote_average && itemData.vote_average.toFixed(1)}
+            </Text>
           </View>
 
           <TouchableOpacity

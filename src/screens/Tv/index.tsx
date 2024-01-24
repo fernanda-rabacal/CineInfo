@@ -1,88 +1,40 @@
-import { useEffect, useState } from 'react';
-import { FlatList, ScrollView, Text, TextInput, View } from 'react-native';
+import { FlatList, ScrollView, Text, View } from 'react-native';
 import { ItemDisplay } from '../../components/ItemPosterDisplay';
 import { styles } from '../Movies/styles';
 import { ScreenLayout } from '../../components/ScreenLayout';
-import { TvSerie } from '../../@types/cineItems';
 import { useCineItem } from '../../hooks/useData';
+import { CustomCarousel } from '../../components/CustomCarousel';
+import { getRandomDataForCarousel } from '../../utils/getRandomDataForCarousel';
 
 export function TvSeries() {
   const { tvSeries } = useCineItem();
-  const [search, setSearch] = useState('');
-  const [filteredTvSeries, setFilteredTvSeries] = useState<TvSerie[]>([]);
 
-  useEffect(() => {
-    function filterTvSeries() {
-      let tvSeriesData: TvSerie[] = [];
-
-      for (let category of tvSeries) {
-        tvSeriesData.push(...(category.data as TvSerie[]));
-      }
-
-      if (!search) {
-        setFilteredTvSeries([]);
-        return;
-      }
-
-      const updatedTvSeries = tvSeriesData.filter(tvSerie => {
-        const lowerTitle = tvSerie.name!.trim().toLowerCase();
-
-        return lowerTitle.includes(search.trim().toLowerCase());
-      });
-
-      setFilteredTvSeries(updatedTvSeries);
-    }
-
-    filterTvSeries();
-  }, [search, tvSeries]);
+  const carouselItems = getRandomDataForCarousel(tvSeries);
+  const isLoadingData = !tvSeries[0].data.length || !carouselItems.length;
 
   return (
-    <ScreenLayout isLoading={!tvSeries.length}>
-      <TextInput
-        placeholder="Pesquise..."
-        style={styles.searchInput}
-        onChangeText={text => setSearch(text)}
-      />
-      {search.length > 0 ? (
-        <FlatList
-          data={filteredTvSeries}
-          keyExtractor={(item, index) => item.id + index}
-          showsHorizontalScrollIndicator={false}
-          numColumns={3}
-          ListEmptyComponent={
-            <Text style={styles.listEmptyText}>Nenhuma série encontrada</Text>
-          }
-          renderItem={({ item }) => (
-            <ItemDisplay
-              isMovie={false}
-              posterPath={item.poster_path}
-              itemId={item.id}
-              recommendation
+    <ScreenLayout isLoading={isLoadingData}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <CustomCarousel items={carouselItems} />
+        {tvSeries.map(category => (
+          <View key={category.name} style={styles.moviesContainer}>
+            <Text style={styles.movieContainerTitle}>{category.name}</Text>
+            <FlatList
+              data={category.data}
+              keyExtractor={item => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <ItemDisplay
+                  isMovie={false}
+                  posterPath={item.poster_path}
+                  itemId={item.id}
+                />
+              )}
             />
-          )}
-        />
-      ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {tvSeries.map(category => (
-            <View key={category.name} style={styles.moviesContainer}>
-              <Text style={styles.movieContainerTitle}>{category.name}</Text>
-              <FlatList
-                data={category.data}
-                keyExtractor={item => item.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <ItemDisplay
-                    isMovie={false}
-                    posterPath={item.poster_path}
-                    itemId={item.id}
-                  />
-                )}
-              />
-            </View>
-          ))}
-        </ScrollView>
-      )}
+          </View>
+        ))}
+      </ScrollView>
     </ScreenLayout>
   );
 }
