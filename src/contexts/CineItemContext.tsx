@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Dispatch,
   SetStateAction,
@@ -160,7 +161,7 @@ export function CineItemContextProvider({ children }) {
     }
   }
 
-  async function getDiscoverElements() {
+  function getDiscoverElements() {
     let items: (Movie | TvSerie)[] = [];
 
     for (let category of movies) {
@@ -172,6 +173,8 @@ export function CineItemContextProvider({ children }) {
     }
 
     setCineItems(items);
+    console.log(items);
+    console.log(movies);
   }
 
   async function getDetails(itemId: number, isMovie = true) {
@@ -192,13 +195,14 @@ export function CineItemContextProvider({ children }) {
       const itemDetails = {
         ...element.data,
         formattedReleaseDate,
-        recommendations: recommendations.data.results,
-        trailerKey: trailers.data.results[0].key || '',
+        recommendations: recommendations.data?.results || [],
+        trailerKey: trailers.data.results[0]?.key || '',
       };
 
       return itemDetails;
     } catch (error: any) {
       console.error('ITEM DETAILS ERROR: ', error.message);
+      return {};
     }
   }
 
@@ -206,16 +210,18 @@ export function CineItemContextProvider({ children }) {
     async function callFunctions() {
       setIsLoadingNewPage(true);
 
-      await getTvSeries();
       await getMovies();
-      await getDiscoverElements();
+      await getTvSeries();
 
       setIsLoadingNewPage(false);
     }
 
     callFunctions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
+  useEffect(() => {
+    getDiscoverElements();
+  }, [tvSeries]);
 
   return (
     <CineItemContext.Provider
