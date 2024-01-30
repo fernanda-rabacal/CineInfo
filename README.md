@@ -6,6 +6,7 @@ This is a mobile app where you can find movies and tv series, see the details, r
 
 - Making search functionality on Discover screen
 - Possibility of reviewing the cine item
+- Login and user profile
 
 ## Skills 🧰
 <div>
