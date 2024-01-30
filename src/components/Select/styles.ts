@@ -5,6 +5,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
   },
+  showText: {
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
+  },
   modal: {
     backgroundColor: '#1f1632',
     flex: 1,

@@ -46,7 +46,7 @@ export function Select({ options, onChangeSelect, title }) {
       <TouchableOpacity
         style={styles.container}
         onPress={() => setModalVisible(true)}>
-        <Text>{text}</Text>
+        <Text style={styles.showText}>{text}</Text>
         <CaretDown color="#ccc" size={18} weight="fill" />
       </TouchableOpacity>
 
