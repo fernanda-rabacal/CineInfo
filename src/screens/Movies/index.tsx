@@ -5,6 +5,7 @@ import { ScreenLayout } from '../../components/ScreenLayout';
 import { useCineItem } from '../../hooks/useData';
 import { CustomCarousel } from '../../components/CustomCarousel';
 import { getRandomDataForCarousel } from '../../utils/getRandomDataForCarousel';
+import { ShowMoreButton } from '../../components/ShowMoreButton';
 
 export function Movies() {
   const { movies } = useCineItem();
@@ -24,6 +25,7 @@ export function Movies() {
               data={category.data}
               keyExtractor={item => item.id}
               horizontal
+              ListFooterComponent={<ShowMoreButton />}
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
                 <ItemDisplay

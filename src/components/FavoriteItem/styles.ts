@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,21 +9,21 @@ export const styles = StyleSheet.create({
   poster: {
     width: 110,
     height: 160,
-    borderRadius: 10
-  }, 
+    borderRadius: 10,
+  },
   title: {
     fontSize: 20,
-    color: "#ccc",
-    marginBottom: 25
+    color: '#ccc',
+    marginBottom: 25,
   },
   text: {
     fontSize: 15,
-    color: '#ccc'
+    color: '#ccc',
   },
   dataContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 8
-  }
-})
+    marginBottom: 8,
+  },
+});

@@ -5,6 +5,7 @@ import { ScreenLayout } from '../../components/ScreenLayout';
 import { useCineItem } from '../../hooks/useData';
 import { CustomCarousel } from '../../components/CustomCarousel';
 import { getRandomDataForCarousel } from '../../utils/getRandomDataForCarousel';
+import { ShowMoreButton } from '../../components/ShowMoreButton';
 
 export function TvSeries() {
   const { tvSeries } = useCineItem();
@@ -22,8 +23,9 @@ export function TvSeries() {
             <FlatList
               data={category.data}
               keyExtractor={item => item.id}
-              horizontal
+              ListFooterComponent={<ShowMoreButton />}
               showsHorizontalScrollIndicator={false}
+              horizontal
               renderItem={({ item }) => (
                 <ItemDisplay
                   isMovie={false}

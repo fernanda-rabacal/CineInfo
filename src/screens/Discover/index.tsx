@@ -73,6 +73,7 @@ export function Discover() {
     }
 
     const resultItems = cineItems.filter(item => {
+      //@ts-ignore
       const lowerTitle = (item.title || item.name).trim().toLowerCase();
 
       return lowerTitle.includes(search.trim().toLowerCase());
@@ -121,6 +122,7 @@ export function Discover() {
               onEndReachedThreshold={0.2}
               renderItem={({ item }) => (
                 <ItemDisplay
+                  //@ts-ignore
                   isMovie={!!item.title}
                   posterPath={item.poster_path}
                   itemId={item.id}
@@ -171,6 +173,7 @@ export function Discover() {
             keyExtractor={(item, index) => item.id + index.toString()}
             renderItem={({ item }) => (
               <ItemDisplay
+                //@ts-ignore
                 isMovie={!!item.title}
                 posterPath={item.poster_path}
                 itemId={item.id}
