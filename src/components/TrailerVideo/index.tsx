@@ -1,8 +1,8 @@
-import {Dispatch, SetStateAction, useEffect} from 'react';
-import {Dimensions, Modal, TouchableOpacity} from 'react-native';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dimensions, Modal, TouchableOpacity } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import {CaretLeft} from 'phosphor-react-native';
+import { CaretLeft } from 'phosphor-react-native';
 
 interface TrailerVideoProps {
   trailerKey: string;
@@ -38,7 +38,7 @@ export function TrailerVideo({
   return (
     <Modal visible={visible} onRequestClose={() => onChangeVisible(false)}>
       <TouchableOpacity
-        style={{position: 'absolute', top: 20, left: 20, zIndex: 10}}
+        style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}
         onPress={() => onChangeVisible(false)}>
         <CaretLeft color="#fff" />
       </TouchableOpacity>

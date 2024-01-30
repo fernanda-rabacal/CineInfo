@@ -2,10 +2,10 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   image: {
-    width: 115,
+    width: 110,
     height: 175,
     borderRadius: 6,
-    margin: 5,
+    margin: 6,
   },
   title: {
     width: 150,
