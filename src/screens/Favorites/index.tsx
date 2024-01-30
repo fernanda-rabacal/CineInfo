@@ -19,6 +19,7 @@ export function Favorites() {
     <ScreenLayout>
       <Text style={styles.title}>Minha lista</Text>
       <ScrollView
+        style={{ paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
