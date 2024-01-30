@@ -60,8 +60,9 @@ export function Discover() {
     }
   }
 
-  function toggleModal() {
-    setModalVisible(prevState => !prevState);
+  function closeModal() {
+    setSearch('');
+    setModalVisible(false);
   }
 
   function handleSearchItems() {
@@ -93,7 +94,7 @@ export function Discover() {
           animationInTiming={500}>
           <View style={styles.modalContent}>
             <View style={styles.gotBackContainer}>
-              <TouchableOpacity onPress={toggleModal}>
+              <TouchableOpacity onPress={closeModal}>
                 <CaretLeft color="#dddddd" size={28} />
               </TouchableOpacity>
               <View style={[styles.searchInput, { flex: 1 }]}>
@@ -167,7 +168,7 @@ export function Discover() {
             data={filteredItems}
             showsVerticalScrollIndicator={false}
             numColumns={3}
-            contentContainerStyle={{ alignItems: 'center' }}
+            contentContainerStyle={{ alignItems: 'center', paddingBottom: 20 }}
             onEndReached={onEndReached}
             onEndReachedThreshold={0.2}
             keyExtractor={(item, index) => item.id + index.toString()}
