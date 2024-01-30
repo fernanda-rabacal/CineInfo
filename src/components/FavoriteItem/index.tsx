@@ -18,7 +18,12 @@ export function FavoriteItem({ item }) {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate('Details', { item })}>
+      onPress={() =>
+        navigation.navigate('Details', {
+          itemId: item.id,
+          isMovie: !!item.title,
+        })
+      }>
       <Image
         style={styles.poster}
         source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }}
