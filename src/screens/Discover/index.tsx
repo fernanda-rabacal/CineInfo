@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   FlatList,
   Text,
@@ -164,10 +164,11 @@ export function Discover() {
           <FlatList
             data={filteredItems}
             showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => item.id + index.toString()}
             numColumns={3}
+            contentContainerStyle={{ alignItems: 'center' }}
             onEndReached={onEndReached}
             onEndReachedThreshold={0.2}
+            keyExtractor={(item, index) => item.id + index.toString()}
             renderItem={({ item }) => (
               <ItemDisplay
                 isMovie={!!item.title}

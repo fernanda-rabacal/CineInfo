@@ -58,5 +58,5 @@ export const styles = StyleSheet.create({
   noDataFoundText: {
     textAlign: 'center',
     fontSize: 25,
-  }
+  },
 });
