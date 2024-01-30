@@ -60,11 +60,14 @@ export function Details({ navigation, route }) {
 
   return (
     <ScreenLayout isLoading={isLoading} style={styles.container}>
-      <TrailerVideo
-        trailerKey={itemData.trailerKey}
-        visible={modalTrailerVisible}
-        onChangeVisible={setModalTrailerVisible}
-      />
+      {itemData?.trailerKey && (
+        <TrailerVideo
+          trailerKey={itemData.trailerKey}
+          visible={modalTrailerVisible}
+          onChangeVisible={setModalTrailerVisible}
+        />
+      )}
+
       <TouchableOpacity
         style={styles.backBtn}
         onPress={() => navigation.goBack()}>
@@ -74,11 +77,11 @@ export function Details({ navigation, route }) {
         <Image
           style={styles.poster}
           source={{
-            uri: `https://image.tmdb.org/t/p/w500${itemData.backdrop_path}`,
+            uri: `https://image.tmdb.org/t/p/w500${itemData?.backdrop_path}`,
           }}
         />
-        <Text style={styles.title}>{itemData.title || itemData.name}</Text>
-        {itemData.trailerKey && (
+        <Text style={styles.title}>{itemData?.title || itemData?.name}</Text>
+        {itemData?.trailerKey && (
           <TouchableOpacity
             style={styles.trailerBtnContainer}
             onPress={() => setModalTrailerVisible(true)}>
@@ -87,13 +90,13 @@ export function Details({ navigation, route }) {
           </TouchableOpacity>
         )}
         <View style={styles.timeAndVoteContainer}>
-          {itemData.runtime && (
+          {itemData?.runtime && (
             <View style={styles.dataContainer}>
               <Clock color="#ccc" size={17} />
               <Text style={styles.text}>{itemData.runtime} minutos</Text>
             </View>
           )}
-          {itemData.number_of_seasons && (
+          {itemData?.number_of_seasons && (
             <View>
               <Text style={styles.text}>
                 {itemData.number_of_seasons} Temporadas
@@ -103,7 +106,7 @@ export function Details({ navigation, route }) {
           <View style={styles.dataContainer}>
             <Star color="#ffb42a" size={17} />
             <Text style={styles.text}>
-              {itemData.vote_average && itemData.vote_average.toFixed(1)}
+              {itemData?.vote_average && itemData.vote_average.toFixed(1)}
             </Text>
           </View>
 
@@ -118,12 +121,12 @@ export function Details({ navigation, route }) {
         <View style={styles.releaseAndGenreContainer}>
           <View style={{ width: '45%' }}>
             <Text style={styles.releaseAndGenreTitle}>Lançamento</Text>
-            <Text style={styles.text}>{itemData.formattedReleaseDate}</Text>
+            <Text style={styles.text}>{itemData?.formattedReleaseDate}</Text>
           </View>
           <View>
             <Text style={styles.releaseAndGenreTitle}>Gêneros</Text>
             <View style={styles.dataContainer}>
-              {itemData.genres &&
+              {itemData?.genres &&
                 itemData.genres
                   .filter((_, i) => i <= 2)
                   .map(genre => (
@@ -134,15 +137,15 @@ export function Details({ navigation, route }) {
             </View>
           </View>
         </View>
-        <Text style={styles.overview}>{itemData.overview}</Text>
+        <Text style={styles.overview}>{itemData?.overview}</Text>
 
-        {itemData.recommendations && itemData.recommendations.length > 0 && (
+        {itemData?.recommendations && itemData.recommendations.length > 0 && (
           <>
             <Text style={styles.recommendationsTitle}>
               Conteúdos semelhantes
             </Text>
             <View style={styles.recommendations}>
-              {itemData.recommendations.map(recommedation => (
+              {itemData?.recommendations.map(recommedation => (
                 <ItemDisplay
                   key={recommedation.id}
                   isMovie={!!recommedation.title}
