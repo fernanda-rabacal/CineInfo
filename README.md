@@ -1,6 +1,6 @@
 # CineInfo
 
-This is a mobile app where you can find movies and tv series, see the details, ratings and trailers of it, see related contents, discover new items and mark your favorites. It is made with React Native, consuming the TMDB API.
+This is a mobile app where you can find movies and tv series, see the details, ratings and trailers of it, see recommendations, discover and search for new items and mark your favorites. It is made with React Native, consuming the TMDB API. 
 
 ### Status: In progress 🚧
 
