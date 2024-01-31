@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../themes/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,12 +8,12 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
   activeDot: {
-    color: 'white',
+    color: theme.COLORS.WHITE,
     margin: 3,
     opacity: 1,
   },
   inactiveDot: {
-    color: 'white',
+    color: theme.COLORS.WHITE,
     margin: 3,
     opacity: 0.5,
   },

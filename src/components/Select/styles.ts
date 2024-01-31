@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../themes/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -6,13 +7,13 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
   showText: {
-    fontSize: 16,
-    fontFamily: 'Poppins-Regular',
+    fontSize: theme.FONT_SIZE.MD,
+    fontFamily: theme.FONTS.TEXT,
   },
   modal: {
-    backgroundColor: '#1f1632',
     flex: 1,
     paddingTop: 20,
+    backgroundColor: theme.COLORS.BACKGROUND,
   },
   header: {
     flexDirection: 'row',
@@ -21,20 +22,20 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   headerTitle: {
-    color: '#fff',
+    fontSize: theme.FONT_SIZE.XL,
+    fontFamily: theme.FONTS.TEXT,
+    color: theme.COLORS.WHITE,
     opacity: 0.8,
-    fontSize: 20,
-    fontFamily: 'Poppins-Regular',
   },
   optionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: theme.FONTS.TEXT,
   },
   optionTitle: {
-    fontSize: 18,
-    fontFamily: 'Poppins-Regular',
+    fontSize: theme.FONT_SIZE.LG,
+    fontFamily: theme.FONTS.TEXT,
   },
 });

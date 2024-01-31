@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../themes/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,13 +13,13 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
   },
   title: {
-    fontSize: 20,
-    color: '#ccc',
+    fontSize: theme.FONT_SIZE.XL,
+    color: theme.COLORS.GRAY_200,
     marginBottom: 25,
   },
   text: {
-    fontSize: 15,
-    color: '#ccc',
+    fontSize: theme.FONT_SIZE.MD,
+    color: theme.COLORS.GRAY_200,
   },
   dataContainer: {
     flexDirection: 'row',

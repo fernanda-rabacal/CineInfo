@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../themes/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -22,9 +23,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
-    backgroundColor: '#866287',
-    color: '#dedede',
-    fontSize: 16,
+    backgroundColor: theme.COLORS.INPUT,
+    color: theme.COLORS.GRAY_100,
+    fontSize: theme.FONT_SIZE.MD,
     paddingHorizontal: 7,
     borderRadius: 5,
     shadowColor: '#000',
@@ -42,7 +43,7 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
-    backgroundColor: '#1f1632',
+    backgroundColor: theme.COLORS.BACKGROUND,
     padding: 15,
   },
   gotBackContainer: {
@@ -52,11 +53,11 @@ export const styles = StyleSheet.create({
     marginBottom: 30,
   },
   searchResultText: {
-    fontSize: 20,
+    fontSize: theme.FONT_SIZE.XL,
     marginBottom: 20,
   },
   noDataFoundText: {
     textAlign: 'center',
-    fontSize: 25,
+    fontSize: theme.FONT_SIZE.XXL,
   },
 });

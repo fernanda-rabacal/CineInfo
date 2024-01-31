@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../themes/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,9 +9,9 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
   },
   text: {
-    fontFamily: 'Poppins-Regular',
-    color: '#ccc',
-    fontSize: 15,
+    fontFamily: theme.FONTS.TEXT,
+    fontSize: theme.FONT_SIZE.SM,
+    color: theme.COLORS.GRAY_200,
   },
   poster: {
     width: '100%',
@@ -18,20 +19,20 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
   },
   title: {
-    fontSize: 25,
+    fontSize: theme.FONT_SIZE.XXL,
     color: '#ededed',
     marginVertical: 15,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: theme.FONTS.TEXT,
   },
   trailerBtnContainer: {
     flexDirection: 'row',
-    gap: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 5,
     paddingVertical: 5,
-    borderRadius: 5,
     marginBottom: 20,
-    backgroundColor: '#bc85ff',
+    borderRadius: 5,
+    backgroundColor: theme.COLORS.PURPLE_400,
   },
   timeAndVoteContainer: {
     flexDirection: 'row',
@@ -41,41 +42,41 @@ export const styles = StyleSheet.create({
   releaseAndGenreContainer: {
     flexDirection: 'row',
     paddingTop: 10,
-    borderTopColor: '#656565',
+    borderTopColor: theme.COLORS.GRAY_DEFAULT,
     borderTopWidth: 1,
     marginBottom: 20,
   },
   releaseAndGenreTitle: {
-    fontSize: 16,
-    color: '#ededed',
+    fontSize: theme.FONT_SIZE.MD,
+    color: theme.COLORS.GRAY_100,
+    fontFamily: theme.FONTS.TEXT,
     marginBottom: 10,
-    fontFamily: 'Poppins-Regular',
   },
   genreName: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 5,
     textAlign: 'center',
+    color: theme.COLORS.GRAY_200,
+    borderWidth: 1,
+    borderColor: theme.COLORS.GRAY_200,
+    padding: 5,
     borderRadius: 5,
-    color: '#c3c3c3',
-    fontSize: 12,
+    fontSize: theme.FONT_SIZE.SSM,
   },
   dataContainer: {
     flexDirection: 'row',
-    gap: 5,
     alignItems: 'center',
+    gap: 5,
   },
   overview: {
-    fontSize: 16,
+    fontSize: theme.FONT_SIZE.MD,
     color: '#fffffff2',
     opacity: 0.8,
     textAlign: 'justify',
-    fontFamily: 'Poppins-Regular',
+    fontFamily: theme.FONTS.TEXT,
   },
   recommendationsTitle: {
-    color: '#ffffff',
-    fontFamily: 'Poppins-Regular',
-    fontSize: 20,
+    color: theme.COLORS.WHITE,
+    fontFamily: theme.FONTS.TEXT,
+    fontSize: theme.FONT_SIZE.XL,
     marginTop: 25,
     marginBottom: 15,
   },

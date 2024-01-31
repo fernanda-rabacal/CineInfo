@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../themes/theme';
 
 export const styles = StyleSheet.create({
   image: {
@@ -9,8 +10,8 @@ export const styles = StyleSheet.create({
   },
   title: {
     width: 150,
-    fontSize: 16,
-    color: 'white',
+    fontSize: theme.FONT_SIZE.MD,
+    color: theme.COLORS.WHITE,
     textAlign: 'center',
   },
 });

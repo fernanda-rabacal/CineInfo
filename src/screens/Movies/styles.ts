@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../themes/theme';
 
 export const styles = StyleSheet.create({
   moviesContainer: {
@@ -6,9 +7,9 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   movieContainerTitle: {
-    fontSize: 20,
-    color: '#ebe6ee',
+    color: theme.COLORS.GRAY_100,
+    fontSize: theme.FONT_SIZE.LG,
+    fontFamily: theme.FONTS.TEXT,
     marginBottom: 5,
-    fontFamily: 'Poppins-Regular',
   },
 });

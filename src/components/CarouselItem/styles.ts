@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../themes/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,15 +8,14 @@ export const styles = StyleSheet.create({
     position: 'relative',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#ffffff',
+    color: theme.COLORS.WHITE,
+    fontSize: theme.FONT_SIZE.XL,
+    fontFamily: theme.FONTS.TITLE,
     textTransform: 'uppercase',
     position: 'absolute',
     bottom: 10,
     left: 15,
     zIndex: 100,
-    fontFamily: 'Poppins-Regular',
   },
   image: {
     height: '100%',

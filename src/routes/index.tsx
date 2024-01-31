@@ -17,6 +17,7 @@ import {
   TvSeriesIcon,
 } from '../components/AppRoutesIcons';
 import { styles } from '../components/AppRoutesIcons/styles';
+import theme from '../themes/theme';
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRouteProps>;
 
@@ -32,10 +33,10 @@ export function Router() {
     <Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#ffffff',
-        tabBarInactiveTintColor: '#7b7b7bd9',
+        tabBarActiveTintColor: theme.COLORS.WHITE,
+        tabBarInactiveTintColor: theme.COLORS.GRAY_300,
         tabBarStyle: {
-          backgroundColor: '#1f1632',
+          backgroundColor: theme.COLORS.BACKGROUND,
           paddingTop: 15,
           marginBottom: 5,
         },
