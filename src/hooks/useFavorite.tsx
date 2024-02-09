@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Movie, TvSerie } from '../@types/cineItems';
+import { StorageService } from '../data/services/StorageService';
 
 export function useFavorite(id?: string) {
   const [favorites, setFavorites] = useState<(Movie | TvSerie)[]>([]);
@@ -12,7 +12,7 @@ export function useFavorite(id?: string) {
 
   async function getFavorites() {
     try {
-      const items = await AsyncStorage.getItem('favorites');
+      const items = await StorageService.getItem('favorites');
 
       if (items) {
         setFavorites(JSON.parse(items));
@@ -24,7 +24,7 @@ export function useFavorite(id?: string) {
 
   async function fetchFavorites() {
     try {
-      await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+      await StorageService.setItem('favorites', JSON.stringify(favorites));
     } catch (error) {
       console.error('Error storaging data');
     }
