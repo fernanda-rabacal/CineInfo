@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RefreshControl, Text, ScrollView } from 'react-native';
 import { styles } from './styles';
-import { FavoriteItem } from '../../components/FavoriteItem';
+import { FavoriteItem } from './components/FavoriteItem';
 import { ScreenLayout } from '../../components/ScreenLayout';
 import { useFavorite } from '../../hooks/useFavorite';
 
