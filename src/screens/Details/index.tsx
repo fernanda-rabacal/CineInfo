@@ -21,29 +21,20 @@ import { useCineItem } from '../../hooks/useData';
 
 export function Details({ navigation, route }) {
   const { itemId, isMovie } = route.params;
-  const { favorites, addToFavorites, removeFromFavorites } = useFavorite();
+  const { addToFavorites, removeFromFavorites, isFavorited } = useFavorite();
   const { getDetails } = useCineItem();
 
-  const [isFavorited, setIsFavorited] = useState(() => {
-    const isFavorite = favorites.find(favorite => favorite.id === itemId);
-
-    return !!isFavorite;
-  });
-  const [itemData, setItemData] = useState({} as DetailsProps);
+  const [itemDetails, setItemData] = useState({} as DetailsProps);
   const [modalTrailerVisible, setModalTrailerVisible] = useState(false);
 
-  const isLoading = Object.keys(itemData).length === 0;
+  const isLoading = Object.keys(itemDetails).length === 0;
 
   function handleAddToFavorites() {
-    addToFavorites(itemData);
-
-    setIsFavorited(true);
+    addToFavorites(itemDetails);
   }
 
   function handleRemoveFromFavorites() {
     removeFromFavorites(itemId);
-
-    setIsFavorited(false);
   }
 
   async function getItemsData() {
@@ -60,9 +51,9 @@ export function Details({ navigation, route }) {
 
   return (
     <ScreenLayout isLoading={isLoading} style={styles.container}>
-      {itemData?.trailerKey && (
+      {itemDetails?.trailerKey && (
         <TrailerVideo
-          trailerKey={itemData.trailerKey}
+          trailerKey={itemDetails.trailerKey}
           visible={modalTrailerVisible}
           onChangeVisible={setModalTrailerVisible}
         />
@@ -77,11 +68,13 @@ export function Details({ navigation, route }) {
         <Image
           style={styles.poster}
           source={{
-            uri: `https://image.tmdb.org/t/p/w500${itemData?.backdrop_path}`,
+            uri: `https://image.tmdb.org/t/p/w500${itemDetails?.backdrop_path}`,
           }}
         />
-        <Text style={styles.title}>{itemData?.title || itemData?.name}</Text>
-        {itemData?.trailerKey && (
+        <Text style={styles.title}>
+          {itemDetails?.title || itemDetails?.name}
+        </Text>
+        {itemDetails?.trailerKey && (
           <TouchableOpacity
             style={styles.trailerBtnContainer}
             onPress={() => setModalTrailerVisible(true)}>
@@ -90,23 +83,23 @@ export function Details({ navigation, route }) {
           </TouchableOpacity>
         )}
         <View style={styles.timeAndVoteContainer}>
-          {itemData?.runtime && (
+          {itemDetails?.runtime && (
             <View style={styles.dataContainer}>
               <Clock color="#ccc" size={17} />
-              <Text style={styles.text}>{itemData.runtime} minutos</Text>
+              <Text style={styles.text}>{itemDetails.runtime} minutos</Text>
             </View>
           )}
-          {itemData?.number_of_seasons && (
+          {itemDetails?.number_of_seasons && (
             <View>
               <Text style={styles.text}>
-                {itemData.number_of_seasons} Temporadas
+                {itemDetails.number_of_seasons} Temporadas
               </Text>
             </View>
           )}
           <View style={styles.dataContainer}>
             <Star color="#ffb42a" size={17} />
             <Text style={styles.text}>
-              {itemData?.vote_average && itemData.vote_average.toFixed(1)}
+              {itemDetails?.vote_average && itemDetails.vote_average.toFixed(1)}
             </Text>
           </View>
 
@@ -121,13 +114,13 @@ export function Details({ navigation, route }) {
         <View style={styles.releaseAndGenreContainer}>
           <View style={{ width: '45%' }}>
             <Text style={styles.releaseAndGenreTitle}>Lançamento</Text>
-            <Text style={styles.text}>{itemData?.formattedReleaseDate}</Text>
+            <Text style={styles.text}>{itemDetails?.formattedReleaseDate}</Text>
           </View>
           <View>
             <Text style={styles.releaseAndGenreTitle}>Gêneros</Text>
             <View style={styles.dataContainer}>
-              {itemData?.genres &&
-                itemData.genres
+              {itemDetails?.genres &&
+                itemDetails.genres
                   .filter((_, i) => i <= 2)
                   .map(genre => (
                     <Text style={styles.genreName} key={genre.id}>
@@ -137,26 +130,27 @@ export function Details({ navigation, route }) {
             </View>
           </View>
         </View>
-        <Text style={styles.overview}>{itemData?.overview}</Text>
+        <Text style={styles.overview}>{itemDetails?.overview}</Text>
 
-        {itemData?.recommendations && itemData.recommendations.length > 0 && (
-          <>
-            <Text style={styles.recommendationsTitle}>
-              Conteúdos semelhantes
-            </Text>
-            <View style={styles.recommendations}>
-              {itemData?.recommendations.map(recommedation => (
-                <ItemDisplay
-                  key={recommedation.id}
-                  isMovie={!!recommedation.title}
-                  posterPath={recommedation.poster_path}
-                  itemId={recommedation.id}
-                  recommendation
-                />
-              ))}
-            </View>
-          </>
-        )}
+        {itemDetails?.recommendations &&
+          itemDetails.recommendations.length > 0 && (
+            <>
+              <Text style={styles.recommendationsTitle}>
+                Conteúdos semelhantes
+              </Text>
+              <View style={styles.recommendations}>
+                {itemDetails?.recommendations.map(recommedation => (
+                  <ItemDisplay
+                    key={recommedation.id}
+                    isMovie={!!recommedation.title}
+                    posterPath={recommedation.poster_path}
+                    itemId={recommedation.id}
+                    recommendation
+                  />
+                ))}
+              </View>
+            </>
+          )}
       </ScrollView>
     </ScreenLayout>
   );

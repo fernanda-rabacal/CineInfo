@@ -31,7 +31,7 @@ interface CineItemContextProps {
   isLoadingNewPage: boolean;
   setPage: Dispatch<SetStateAction<number>>;
   getDiscoverElements: () => void;
-  getDetails: (itemId: number, isMovie?: boolean) => Promise<DetailsProps>;
+  getDetails: (itemId: string, isMovie?: boolean) => Promise<DetailsProps>;
 }
 
 export interface CategoriesList {
@@ -173,11 +173,9 @@ export function CineItemContextProvider({ children }) {
     }
 
     setCineItems(items);
-    console.log(items);
-    console.log(movies);
   }
 
-  async function getDetails(itemId: number, isMovie = true) {
+  async function getDetails(itemId: string, isMovie = true) {
     try {
       const url = `/${isMovie ? 'movie' : 'tv'}/${itemId}`;
 

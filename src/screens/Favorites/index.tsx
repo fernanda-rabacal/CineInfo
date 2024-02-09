@@ -1,12 +1,12 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { RefreshControl, Text, ScrollView } from 'react-native';
 import { styles } from './styles';
 import { FavoriteItem } from '../../components/FavoriteItem';
 import { ScreenLayout } from '../../components/ScreenLayout';
-import { FavoritesContext } from '../../contexts/FavoritesContext';
+import { useFavorite } from '../../hooks/useFavorite';
 
 export function Favorites() {
-  const { favorites, getFavorites } = useContext(FavoritesContext);
+  const { favorites, getFavorites } = useFavorite();
   const [refreshing, setRefreshing] = useState(false);
 
   async function fetchFavoritesFromStorage() {
