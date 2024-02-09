@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { styles } from './styles';
-import { useCallback, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import {
   CaretLeft,
@@ -15,39 +13,18 @@ import {
 import { ScreenLayout } from '../../components/ScreenLayout';
 import { ItemDisplay } from '../../components/ItemPosterDisplay';
 import { TrailerVideo } from '../../components/TrailerVideo';
-import { DetailsProps } from '../../contexts/CineItemContext';
-import { useFavorite } from '../../hooks/useFavorite';
-import { useCineItem } from '../../hooks/useData';
+import { useDetails } from './hooks/useDetails';
 
 export function Details({ navigation, route }) {
   const { itemId, isMovie } = route.params;
-  const { addToFavorites, removeFromFavorites, isFavorited } = useFavorite();
-  const { getDetails } = useCineItem();
-
-  const [itemDetails, setItemData] = useState({} as DetailsProps);
+  const {
+    itemDetails,
+    isFavorited,
+    isLoading,
+    handleAddToFavorites,
+    handleRemoveFromFavorites,
+  } = useDetails(itemId, isMovie);
   const [modalTrailerVisible, setModalTrailerVisible] = useState(false);
-
-  const isLoading = Object.keys(itemDetails).length === 0;
-
-  function handleAddToFavorites() {
-    addToFavorites(itemDetails);
-  }
-
-  function handleRemoveFromFavorites() {
-    removeFromFavorites(itemId);
-  }
-
-  async function getItemsData() {
-    const details = await getDetails(itemId, isMovie);
-
-    setItemData(details);
-  }
-
-  useFocusEffect(
-    useCallback(() => {
-      getItemsData();
-    }, [itemId]),
-  );
 
   return (
     <ScreenLayout isLoading={isLoading} style={styles.container}>
