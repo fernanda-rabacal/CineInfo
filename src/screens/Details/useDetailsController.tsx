@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
-import { DetailsProps } from '../../../contexts/CineItemContext';
-import { useCineItem } from '../../../hooks/useData';
-import { useFavorite } from '../../../hooks/useFavorite';
+import { DetailsProps } from '../../contexts/CineItemContext';
+import { useCineItem } from '../../hooks/useData';
+import { useFavorite } from '../../hooks/useFavorite';
 import { useFocusEffect } from '@react-navigation/native';
 
-export function useDetails(itemId: string, isMovie = true) {
+export function useDetailsController(itemId: string, isMovie = true) {
   const { addToFavorites, removeFromFavorites, isFavorited } = useFavorite();
   const { getDetails } = useCineItem();
 

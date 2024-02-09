@@ -13,7 +13,7 @@ import {
 import { ScreenLayout } from '../../components/ScreenLayout';
 import { ItemDisplay } from '../../components/ItemPosterDisplay';
 import { TrailerVideo } from '../../components/TrailerVideo';
-import { useDetails } from './hooks/useDetails';
+import { useDetailsController } from './useDetailsController';
 
 export function Details({ navigation, route }) {
   const { itemId, isMovie } = route.params;
@@ -23,7 +23,7 @@ export function Details({ navigation, route }) {
     isLoading,
     handleAddToFavorites,
     handleRemoveFromFavorites,
-  } = useDetails(itemId, isMovie);
+  } = useDetailsController(itemId, isMovie);
   const [modalTrailerVisible, setModalTrailerVisible] = useState(false);
 
   return (
